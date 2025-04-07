@@ -42,5 +42,5 @@ function animate() {
     drawScene();
     requestAnimationFrame(animate);
     }
-animate();
+// animate();
   
