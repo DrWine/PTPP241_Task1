@@ -22,9 +22,12 @@
 
 
   const game = new Phaser.Game(config);
+  let matrix = {}
+  let turn = true;
 
   function preload() {
-    // Use built-in Phaser shape or preload your own image
+    this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
+    this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
   }
 
 
@@ -39,9 +42,9 @@
       for (let col = 0; col < cols; col++) {
         const x = col * cellWidth + cellWidth / 2;
         const y = row * cellHeight + cellHeight / 2;
-
+        matrix[`${row},${col}`] = null;
         this.add.rectangle(x,y, cellWidth, cellHeight, 0x5a189a).setOrigin(0.5);
-            const cell = this.add.rectangle(x, y, 
+            const cell = this.add.rectangle(x, y,
             cellWidth-borderWidth*2, 
             cellHeight-borderWidth*2,
             0x3c096c)
@@ -50,15 +53,35 @@
 
         cell.on('pointerdown', () => {
           console.log(`Clicked cell [${row}, ${col}]`);
+          SpawnX.call(this, x, y, row, col);
         });
       }
     }
 } 
 
 
+  function SpawnX(x, y, row, col){
+    const key = `${row},${col}`
+    if (matrix[key] != null){
+      return;
+    }
+    if (turn){
+      matrix[key] = 'x';
+      const sprite = this.add.image(x, y, 'ObjectX').setScale(0.2);
+    } else {
+      matrix[key] = 'o';
+      const sprite = this.add.image(x, y, 'ObjectO').setScale(0.15);
+    }
+
+    turn = !turn;
+  }
+
   function update() {
     // nothing needed here unless you're adding more logic
   }
+
+
+  
 </script>
 </body>
 </html>
