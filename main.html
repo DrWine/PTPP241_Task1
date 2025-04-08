@@ -111,20 +111,32 @@
         }
       }
 
-      // rows check
-      for (let row = 0; row < rows; row++){
-        let win = true;
-        for (let col = 0; col < cols; col++){
-          const key = `${row},${col}`;
-          if (matrix[key] !=  player) {
-            win = false;  
-            break;
-          }
+      // diagonal check \
+      let win = true;
+      for (let col = 0; col < cols; col++){
+        const key = `${col},${col}`;
+        if (matrix[key] !=  player) {
+          win = false;  
+          break;
         }
-        if (win){
-          console.log(player, ' wins!');
-          return;
+      }
+      if (win){
+        console.log(player, ' wins!');
+        return;
+      }
+
+      // diagonal check /
+      win = true;
+      for (let i = 0; i < cols; i++) {
+        const key = `${i},${cols - 1 - i}`;
+        if (matrix[key] !== player) {
+          win = false;
+          break;
         }
+      }
+      if (win) {
+        console.log(player, ' wins!');
+        return;
       }
 
     });
