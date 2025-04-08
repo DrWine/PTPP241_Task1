@@ -6,10 +6,25 @@
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
+  <div class="navbar">
+    <h1>X si 0</h1>
+  </div>
+
+
+
+  <style>
+    .navbar{
+      border-style: solid;
+      position: static;
+      border-color: rgb(219, 221, 221);;
+      background-color: rgb(219, 221, 221);
+      
+    }
+  </style>
 <script>
   const config = {
     type: Phaser.AUTO,
-    width: 800,
+    width: 600,
     height: 600,
     backgroundColor: '#1d1d1d',
     scene: {
@@ -59,7 +74,6 @@
       }
     }
 } 
-
 
   function TakeTurn(x, y, row, col){
     const key = `${row},${col}`;
