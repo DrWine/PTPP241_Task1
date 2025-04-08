@@ -160,7 +160,7 @@ function Check() {
     }
   }
 
-  if (draw) {
+  if (draw && !win) {
     displayWinner.call(this, `It's a draw!`);
     console.log("It's a draw!");
   }
