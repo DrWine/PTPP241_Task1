@@ -1,48 +1,59 @@
-<!doctype html>
-<html lang="en-US">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>Canvas Grid</title>
-  <style>
-    canvas {
-      border: 1px solid black;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Phaser Mouse Move</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
-  <canvas id="canvas" width="500" height="500"></canvas>
-  <script>
-    function draw() {
-      const canvas = document.getElementById("canvas");
-      if (!canvas.getContext) return;
+<script>
+  const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    backgroundColor: '#1d1d1d',
+    scene: {
+      preload,
+      create,
+      update
+    }
+  };
 
-      const ctx = canvas.getContext("2d");
-      const cellSize = canvas.width / 3;
 
-      for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 3; col++) {
-          const x = col * cellSize;
-          const y = row * cellSize;
-          ctx.strokeRect(x, y, cellSize, cellSize);
-        }
+
+  const game = new Phaser.Game(config);
+
+  function preload() {
+    // Use built-in Phaser shape or preload your own image
+  }
+
+
+  function create() {
+    const cols = 3;
+    const rows = 3;
+    const cellWidth = this.sys.game.config.width / cols;
+    const cellHeight = this.sys.game.config.height / rows;
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x = col * cellWidth + cellWidth / 2;
+        const y = row * cellHeight + cellHeight / 2;
+
+        const cell = this.add.rectangle(x, y, cellWidth, cellHeight, 0xff0000)
+          .setOrigin(0.5)
+          .setInteractive();
+
+        cell.on('pointerdown', () => {
+          console.log(`Clicked cell [${row}, ${col}]`);
+        });
       }
     }
+} 
 
-    window.addEventListener("load", draw);
 
-    const canvas = document.getElementById("canvas");
-    canvas.addEventListener("click", function(event) {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      console.log("Click at:", x, y);
-
-      const ctx = canvas.getContext("2d");
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  </script>
+  function update() {
+    // nothing needed here unless you're adding more logic
+  }
+</script>
 </body>
 </html>
