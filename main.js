@@ -89,6 +89,7 @@ function Check() {
         }
       }
       if (win) {
+        displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
         return;
       }
@@ -104,6 +105,7 @@ function Check() {
         }
       }
       if (win) {
+        displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
         return;
       }
@@ -118,6 +120,7 @@ function Check() {
       }
     }
     if (win) {
+      displayWinner.call(this, `Player ${player} wins!`);
       console.log(player, 'wins!');
       return;
     }
@@ -131,12 +134,29 @@ function Check() {
       }
     }
     if (win) {
+      displayWinner.call(this, `Player "${player}" wins!`);
       console.log(player, 'wins!');
       return;
     }
   });
 }
 
+function displayWinner(message){
+  let popup_cover = document.getElementById("popup-cover");
+  let popup_text = document.getElementById("popup-text");
+
+  popup_cover.style.display = "block";
+  popup_text.innerText = message;
+}
+
+
+
+
 function update() {
   // no game loop logic needed here
+}
+
+
+function restart() {
+  location.reload(); // simplest way to reset everything
 }
