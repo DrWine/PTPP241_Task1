@@ -3,201 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <title>X and Zero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-</head>
-<body>
-  <body>
-    <div class="navbar">
-      <h1>X si 0</h1>
-    </div>
-  
-    <div id="game-wrapper">
-      <div id="game-container"></div>
-    </div>
-  
 
   <style>
     html, body {
+      font-family: 'Orbitron', sans-serif;
       margin: 0;
       padding: 0;
       height: 100%;
       background-color: #111;
     }
-  
+
     .navbar {
       position: absolute;
       top: 0;
       width: 100%;
       text-align: center;
-      background-color: #222;
-      color: #fff;
+      background-color: #1d1d1d;
+      color: #f5f5f5;
       padding: 10px 0;
       z-index: 10;
     }
-  
+
     #game-wrapper {
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-  
+
     #game-container {
       width: 600px;
       height: 600px;
     }
-  
+
     canvas {
       display: block;
       margin: 0 auto;
     }
   </style>
-  
-<script>
-const config = {
-  type: Phaser.AUTO,
-  width: 600,
-  height: 600,
-  backgroundColor: '#1d1d1d',
-  parent: 'game-container', // THIS is the key
-  scene: {
-    preload,
-    create,
-    update
-  }
-};
+</head>
+<body>
+  <div class="navbar">
+    <h1>X si O</h1>
+  </div>
 
+  <div id="game-wrapper">
+    <div id="game-container"></div>
+  </div>
 
+  <script>
+    const config = {
+      type: Phaser.AUTO,
+      width: 600,
+      height: 600,
+      backgroundColor: '#1d1d1d',
+      parent: 'game-container',
+      scene: {
+        preload,
+        create,
+        update
+      }
+    };
 
+    const game = new Phaser.Game(config);
+    const cols = 3;
+    const rows = 3;
+    let matrix = {};
+    let players = ['o', 'x'];
+    let turn = true;
 
-  const game = new Phaser.Game(config);
-  const cols = 3;
-  const rows = 3;
-  let matrix = {}
-  let players = ['o', 'x'];
-  let turn = true;
+    function preload() {
+      this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
+      this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
+    }
 
-  function preload() {
-    this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
-    this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
-  }
+    function create() {
+      const cellOuterColor = 0x2e2e2e;  // dark outer grid
+      const cellInnerColor = 0x444444;  // slightly lighter inner cell
+      const strokeColor = 0x666666;
 
+      const cellWidth = this.sys.game.config.width / cols;
+      const cellHeight = this.sys.game.config.height / rows;
+      const borderWidth = 4;
 
-  function create() {
-    const cellWidth = this.sys.game.config.width / cols;
-    const cellHeight = this.sys.game.config.height / rows;
-    const borderWidth = 4;
-    
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const x = col * cellWidth + cellWidth / 2;
-        const y = row * cellHeight + cellHeight / 2;
-        matrix[`${row},${col}`] = null;
-        this.add.rectangle(x,y, cellWidth, cellHeight, 0x5a189a).setOrigin(0.5);
-            const cell = this.add.rectangle(x, y,
-            cellWidth-borderWidth*2, 
-            cellHeight-borderWidth*2,
-            0x3c096c)
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x = col * cellWidth + cellWidth / 2;
+          const y = row * cellHeight + cellHeight / 2;
+          matrix[`${row},${col}`] = null;
+
+          // outer cell background
+          this.add.rectangle(x, y, cellWidth, cellHeight, cellInnerColor).setOrigin(0.5);
+
+          // interactive inner cell
+          const cell = this.add.rectangle(
+            x, y,
+            cellWidth - borderWidth * 2,
+            cellHeight - borderWidth * 2,
+            cellOuterColor
+          )
           .setOrigin(0.5)
-          .setInteractive();
+          .setInteractive()
+          .setStrokeStyle(1, strokeColor);
 
-        cell.on('pointerdown', () => {
-          console.log(`Clicked cell [${row}, ${col}]`);
-          TakeTurn.call(this, x, y, row, col);
-        });
+          cell.on('pointerdown', () => {
+            console.log(`Clicked cell [${row}, ${col}]`);
+            TakeTurn.call(this, x, y, row, col);
+          });
+        }
       }
     }
-} 
 
-  function TakeTurn(x, y, row, col){
-    const key = `${row},${col}`;
-    if (matrix[key] != null){
-      return;
+    function TakeTurn(x, y, row, col) {
+      const key = `${row},${col}`;
+      if (matrix[key] != null) {
+        return;
+      }
+      if (turn) {
+        matrix[key] = 'x';
+        this.add.image(x, y, 'ObjectX').setScale(0.2);
+      } else {
+        matrix[key] = 'o';
+        this.add.image(x, y, 'ObjectO').setScale(0.15);
+      }
+
+      turn = !turn;
+      Check.call(this);
     }
-    if (turn){
-      matrix[key] = 'x';
-      const sprite = this.add.image(x, y, 'ObjectX').setScale(0.2);
-    } else {
-      matrix[key] = 'o';
-      const sprite = this.add.image(x, y, 'ObjectO').setScale(0.15);
-    }
 
-    turn = !turn;
-    Check.call(this);
-  }
+    function Check() {
+      players.forEach((player) => {
+        // vertical
+        for (let col = 0; col < cols; col++) {
+          let win = true;
+          for (let row = 0; row < rows; row++) {
+            if (matrix[`${row},${col}`] !== player) {
+              win = false;
+              break;
+            }
+          }
+          if (win) {
+            console.log(player, 'wins!');
+            return;
+          }
+        }
 
-  function Check(){
-    players.forEach((player, index) => {
-      //colums check
-      for (let col = 0; col < cols; col++){
+        // horizontal
+        for (let row = 0; row < rows; row++) {
+          let win = true;
+          for (let col = 0; col < cols; col++) {
+            if (matrix[`${row},${col}`] !== player) {
+              win = false;
+              break;
+            }
+          }
+          if (win) {
+            console.log(player, 'wins!');
+            return;
+          }
+        }
+
+        // diagonal \
         let win = true;
-        for (let row = 0; row < rows; row++){
-          const key = `${row},${col}`;
-          if (matrix[key] !=  player) {
-            win = false;  
+        for (let i = 0; i < cols; i++) {
+          if (matrix[`${i},${i}`] !== player) {
+            win = false;
             break;
           }
         }
-        if (win){
-          console.log(player, ' wins!');
+        if (win) {
+          console.log(player, 'wins!');
           return;
         }
-      }
-      // rows check
-      for (let row = 0; row < rows; row++){
-        let win = true;
-        for (let col = 0; col < cols; col++){
-          const key = `${row},${col}`;
-          if (matrix[key] !=  player) {
-            win = false;  
+
+        // diagonal /
+        win = true;
+        for (let i = 0; i < cols; i++) {
+          if (matrix[`${i},${cols - 1 - i}`] !== player) {
+            win = false;
             break;
           }
         }
-        if (win){
-          console.log(player, ' wins!');
+        if (win) {
+          console.log(player, 'wins!');
           return;
         }
-      }
+      });
+    }
 
-      // diagonal check \
-      let win = true;
-      for (let col = 0; col < cols; col++){
-        const key = `${col},${col}`;
-        if (matrix[key] !=  player) {
-          win = false;  
-          break;
-        }
-      }
-      if (win){
-        console.log(player, ' wins!');
-        return;
-      }
-
-      // diagonal check /
-      win = true;
-      for (let i = 0; i < cols; i++) {
-        const key = `${i},${cols - 1 - i}`;
-        if (matrix[key] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) {
-        console.log(player, ' wins!');
-        return;
-      }
-
-    });
-  }
-
-
-  function update() {
-    
-    // nothing needed here unless you're adding more logic
-  }
-
-
-  
-</script>
+    function update() {
+      // no game loop logic needed here
+    }
+  </script>
 </body>
 </html>
