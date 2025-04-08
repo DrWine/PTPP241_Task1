@@ -6,33 +6,67 @@
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
-  <div class="navbar">
-    <h1>X si 0</h1>
-  </div>
-
-
+  <body>
+    <div class="navbar">
+      <h1>X si 0</h1>
+    </div>
+  
+    <div id="game-wrapper">
+      <div id="game-container"></div>
+    </div>
+  
 
   <style>
-    .navbar{
-      border-style: solid;
-      position: static;
-      border-color: rgb(219, 221, 221);;
-      background-color: rgb(219, 221, 221);
-      
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #111;
+    }
+  
+    .navbar {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      background-color: #222;
+      color: #fff;
+      padding: 10px 0;
+      z-index: 10;
+    }
+  
+    #game-wrapper {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    #game-container {
+      width: 600px;
+      height: 600px;
+    }
+  
+    canvas {
+      display: block;
+      margin: 0 auto;
     }
   </style>
+  
 <script>
-  const config = {
-    type: Phaser.AUTO,
-    width: 600,
-    height: 600,
-    backgroundColor: '#1d1d1d',
-    scene: {
-      preload,
-      create,
-      update
-    }
-  };
+const config = {
+  type: Phaser.AUTO,
+  width: 600,
+  height: 600,
+  backgroundColor: '#1d1d1d',
+  parent: 'game-container', // THIS is the key
+  scene: {
+    preload,
+    create,
+    update
+  }
+};
+
 
 
 
