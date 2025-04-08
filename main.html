@@ -75,11 +75,12 @@
     }
 
     turn = !turn;
-    CheckColums.call(this);
+    Check.call(this);
   }
 
-  function CheckColums(){
+  function Check(){
     players.forEach((player, index) => {
+      //colums check
       for (let col = 0; col < cols; col++){
         let win = true;
         for (let row = 0; row < rows; row++){
@@ -94,6 +95,38 @@
           return;
         }
       }
+      // rows check
+      for (let row = 0; row < rows; row++){
+        let win = true;
+        for (let col = 0; col < cols; col++){
+          const key = `${row},${col}`;
+          if (matrix[key] !=  player) {
+            win = false;  
+            break;
+          }
+        }
+        if (win){
+          console.log(player, ' wins!');
+          return;
+        }
+      }
+
+      // rows check
+      for (let row = 0; row < rows; row++){
+        let win = true;
+        for (let col = 0; col < cols; col++){
+          const key = `${row},${col}`;
+          if (matrix[key] !=  player) {
+            win = false;  
+            break;
+          }
+        }
+        if (win){
+          console.log(player, ' wins!');
+          return;
+        }
+      }
+
     });
   }
 
