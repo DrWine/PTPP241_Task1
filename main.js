@@ -2,7 +2,7 @@ const config = {
   type: Phaser.AUTO,
   width: 600,
   height: 600,
-  backgroundColor: '#1d1d1d',
+  backgroundColor: '#444444',
   parent: 'game-container',
   scene: {
     preload,
@@ -16,7 +16,9 @@ const cols = 3;
 const rows = 3;
 let matrix = {};
 let players = ['o', 'x'];
+let placedPieces = [];
 let turn = true;
+let gameOver = false;
 
 function preload() {
   this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
@@ -61,18 +63,21 @@ function create() {
 }
 
 function TakeTurn(x, y, row, col) {
+  if (gameOver) return;
+
   const key = `${row},${col}`;
   if (matrix[key] != null) {
     return;
   }
   if (turn) {
     matrix[key] = 'x';
-    this.add.image(x, y, 'ObjectX').setScale(0.2);
+    piece = this.add.image(x, y, 'ObjectX').setScale(0.2);
   } else {
     matrix[key] = 'o';
-    this.add.image(x, y, 'ObjectO').setScale(0.15);
+    piece = this.add.image(x, y, 'ObjectO').setScale(0.15);
   }
-
+  
+  placedPieces.push(piece);
   turn = !turn;
   Check.call(this);
 }
@@ -139,12 +144,26 @@ function Check() {
       return;
     }
   });
+
+  let draw = true;
+  for (let key in matrix) {
+    if (matrix[key] == null) {
+      draw = false;
+      break;
+    }
+  }
+
+  if (draw) {
+    displayWinner.call(this, `It's a draw!`);
+    console.log("It's a draw!");
+  }
+
 }
 
 function displayWinner(message){
   let popup_cover = document.getElementById("popup-cover");
   let popup_text = document.getElementById("popup-text");
-
+  gameOver = true;
   popup_cover.style.display = "block";
   popup_text.innerText = message;
 }
@@ -158,5 +177,18 @@ function update() {
 
 
 function restart() {
-  location.reload(); // simplest way to reset everything
+  let popup_cover = document.getElementById("popup-cover");
+  popup_cover.style.display = "none";
+
+  // Clear matrix state
+  for (let key in matrix){
+    matrix[key] = null;
+  }
+  gameOver = false;
+  turn = true;
+
+  // Destroy all placed X/O pieces
+  placedPieces.forEach(piece => piece.destroy());
+  placedPieces = [];
 }
+
