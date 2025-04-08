@@ -2,7 +2,7 @@ const config = {
   type: Phaser.AUTO,
   width: 600,
   height: 600,
-  backgroundColor: '#444444',
+  backgroundColor: '#0f1425',
   parent: 'game-container',
   scene: {
     preload,
@@ -20,46 +20,51 @@ let placedPieces = [];
 let turn = true;
 let gameOver = false;
 
+
 function preload() {
   this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
   this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
+
 }
 
 function create() {
-  const cellOuterColor = 0x2e2e2e;  // dark outer grid
-  const cellInnerColor = 0x444444;  // slightly lighter inner cell
-  const strokeColor = 0x666666;
+  const cellOuterColor = 0x0f1425;
+  const cellInnerColor = 0x0066a7;  
+  const strokeColor = 0x0066a7;
 
   const cellWidth = this.sys.game.config.width / cols;
   const cellHeight = this.sys.game.config.height / rows;
-  const borderWidth = 4;
+
+  this.textures.get('ObjectX').setFilter(Phaser.Textures.FilterMode.LINEAR);
+  this.textures.get('ObjectO').setFilter(Phaser.Textures.FilterMode.LINEAR);
+
+  const graphics = this.add.graphics();
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const x = col * cellWidth + cellWidth / 2;
-      const y = row * cellHeight + cellHeight / 2;
+      const x = col * cellWidth;
+      const y = row * cellHeight;
       matrix[`${row},${col}`] = null;
 
-      // outer cell background
-      this.add.rectangle(x, y, cellWidth, cellHeight, cellInnerColor).setOrigin(0.5);
+      graphics.fillStyle(cellInnerColor, 1);
+      graphics.fillRect(x, y, cellWidth, cellHeight);
 
-      // interactive inner cell
-      const cell = this.add.rectangle(
-        x, y,
-        cellWidth - borderWidth * 2,
-        cellHeight - borderWidth * 2,
+      let cellRect = this.add.rectangle(
+        x + cellWidth / 2,
+        y + cellHeight / 2,
+        cellWidth - 8, //Border (or the spacing between grid that mimics the border.)
+        cellHeight - 8,
         cellOuterColor
-      )
-      .setOrigin(0.5)
-      .setInteractive()
-      .setStrokeStyle(1, strokeColor);
+      ).setInteractive();
 
-      cell.on('pointerdown', () => {
+      cellRect.on('pointerdown', () => {
         console.log(`Clicked cell [${row}, ${col}]`);
-        TakeTurn.call(this, x, y, row, col);
+        TakeTurn.call(this, x + cellWidth / 2, y + cellHeight / 2, row, col);
       });
     }
   }
+  const canvas = this.sys.game.canvas;
+  canvas.style.opacity = 1;
 }
 
 function TakeTurn(x, y, row, col) {
@@ -69,6 +74,8 @@ function TakeTurn(x, y, row, col) {
   if (matrix[key] != null) {
     return;
   }
+
+  
   if (turn) {
     matrix[key] = 'x';
     piece = this.add.image(x, y, 'ObjectX').setScale(0.2);
