@@ -22,7 +22,10 @@
 
 
   const game = new Phaser.Game(config);
+  const cols = 3;
+  const rows = 3;
   let matrix = {}
+  let players = ['o', 'x'];
   let turn = true;
 
   function preload() {
@@ -32,8 +35,6 @@
 
 
   function create() {
-    const cols = 3;
-    const rows = 3;
     const cellWidth = this.sys.game.config.width / cols;
     const cellHeight = this.sys.game.config.height / rows;
     const borderWidth = 4;
@@ -53,15 +54,15 @@
 
         cell.on('pointerdown', () => {
           console.log(`Clicked cell [${row}, ${col}]`);
-          SpawnX.call(this, x, y, row, col);
+          TakeTurn.call(this, x, y, row, col);
         });
       }
     }
 } 
 
 
-  function SpawnX(x, y, row, col){
-    const key = `${row},${col}`
+  function TakeTurn(x, y, row, col){
+    const key = `${row},${col}`;
     if (matrix[key] != null){
       return;
     }
@@ -74,9 +75,31 @@
     }
 
     turn = !turn;
+    CheckColums.call(this);
   }
 
+  function CheckColums(){
+    players.forEach((player, index) => {
+      for (let col = 0; col < cols; col++){
+        let win = true;
+        for (let row = 0; row < rows; row++){
+          const key = `${row},${col}`;
+          if (matrix[key] !=  player) {
+            win = false;  
+            break;
+          }
+        }
+        if (win){
+          console.log(player, ' wins!');
+          return;
+        }
+      }
+    });
+  }
+
+
   function update() {
+    
     // nothing needed here unless you're adding more logic
   }
 
