@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Phaser Mouse Move</title>
+  <title>X and Zero</title>
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
@@ -33,13 +33,18 @@
     const rows = 3;
     const cellWidth = this.sys.game.config.width / cols;
     const cellHeight = this.sys.game.config.height / rows;
-
+    const borderWidth = 4;
+    
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const x = col * cellWidth + cellWidth / 2;
         const y = row * cellHeight + cellHeight / 2;
 
-        const cell = this.add.rectangle(x, y, cellWidth, cellHeight, 0xff0000)
+        this.add.rectangle(x,y, cellWidth, cellHeight, 0x5a189a).setOrigin(0.5);
+            const cell = this.add.rectangle(x, y, 
+            cellWidth-borderWidth*2, 
+            cellHeight-borderWidth*2,
+            0x3c096c)
           .setOrigin(0.5)
           .setInteractive();
 
