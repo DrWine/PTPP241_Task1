@@ -24,7 +24,6 @@ let gameOver = false;
 function preload() {
   this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
   this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
-
 }
 
 function create() {
@@ -81,7 +80,7 @@ function TakeTurn(x, y, row, col) {
     piece = this.add.image(x, y, 'ObjectX').setScale(0.2);
   } else {
     matrix[key] = 'o';
-    piece = this.add.image(x, y, 'ObjectO').setScale(0.15);
+    piece = this.add.image(x, y, 'ObjectO').setScale(1)
   }
   
   placedPieces.push(piece);
@@ -145,7 +144,7 @@ function Check() {
         break;
       }
     }
-    
+
     if (win) {
       displayWinner.call(this, `Player "${player}" wins!`);
       console.log(player, 'wins!');
