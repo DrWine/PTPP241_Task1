@@ -78,10 +78,10 @@ function TakeTurn(x, y, row, col) {
   
   if (turn) {
     matrix[key] = 'x';
-    piece = this.add.image(x, y, 'ObjectX').setScale(0.2);
+    piece = this.add.image(x, y, 'ObjectX').setScale(0.7);
   } else {
     matrix[key] = 'o';
-    piece = this.add.image(x, y, 'ObjectO').setScale(0.15);
+    piece = this.add.image(x, y, 'ObjectO').setScale(0.5);
   }
   
   placedPieces.push(piece);
