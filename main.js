@@ -77,20 +77,20 @@ function TakeTurn(x, y, row, col) {
   
   if (turn) {
     matrix[key] = 'x';
-    piece = this.add.image(x, y, 'ObjectX').setScale(0.2);
+    piece = this.add.image(x, y, 'ObjectX').setScale(0.7);
   } else {
     matrix[key] = 'o';
-    piece = this.add.image(x, y, 'ObjectO').setScale(1)
+    piece = this.add.image(x, y, 'ObjectO').setScale(0.5);
   }
   
   placedPieces.push(piece);
   turn = !turn;
+  console.log(HasLost.call(this, 'x'));
   Check.call(this);
 }
 
 function Check() {
-  players.forEach((player) => {
-    // vertical
+  for (let player of players) {
     for (let col = 0; col < cols; col++) {
       let win = true;
       for (let row = 0; row < rows; row++) {
@@ -102,11 +102,10 @@ function Check() {
       if (win) {
         displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
+        gameOver = true;
         return;
       }
     }
-
-    // horizontal
     for (let row = 0; row < rows; row++) {
       let win = true;
       for (let col = 0; col < cols; col++) {
@@ -118,13 +117,15 @@ function Check() {
       if (win) {
         displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
+        gameOver = true;
         return;
       }
     }
 
-    // diagonal \
+    // Diagonal "\" win check
     let win = true;
-    for (let i = 0; i < cols; i++) {
+    const diagLength = Math.min(rows, cols);
+    for (let i = 0; i < diagLength; i++) {
       if (matrix[`${i},${i}`] !== player) {
         win = false;
         break;
@@ -133,38 +134,44 @@ function Check() {
     if (win) {
       displayWinner.call(this, `Player ${player} wins!`);
       console.log(player, 'wins!');
+      gameOver = true;
       return;
     }
 
-    // diagonal /
+    // Diagonal "/" win check
     win = true;
-    for (let i = 0; i < cols; i++) {
+    for (let i = 0; i < diagLength; i++) {
       if (matrix[`${i},${cols - 1 - i}`] !== player) {
         win = false;
         break;
       }
     }
     if (win) {
-      displayWinner.call(this, `Player "${player}" wins!`);
+      displayWinner.call(this, `Player ${player} wins!`);
       console.log(player, 'wins!');
+      gameOver = true;
       return;
     }
-  });
+  }
 
   let draw = true;
-  for (let key in matrix) {
-    if (matrix[key] == null) {
-      draw = false;
-      break;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (matrix[`${row},${col}`] == null) {
+        draw = false;
+        break;
+      }
     }
+    if (!draw) break;
   }
 
   if (draw && !win) {
     displayWinner.call(this, `It's a draw!`);
     console.log("It's a draw!");
+    gameOver = true;
   }
-
 }
+
 
 function displayWinner(message){
   let popup_cover = document.getElementById("popup-cover");
@@ -174,13 +181,9 @@ function displayWinner(message){
   popup_text.innerText = message;
 }
 
-
-
-
 function update() {
   // no game loop logic needed here
 }
-
 
 function restart() {
   let popup_cover = document.getElementById("popup-cover");
@@ -198,3 +201,75 @@ function restart() {
   placedPieces = [];
 }
 
+
+function min_max(){
+
+}
+
+function HasLost(MATRIX, ai) {
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+    if (player === ai) continue; // We're only checking if anyone OTHER than AI has won
+
+    // Check columns
+    for (let col = 0; col < cols; col++) {
+      let win = true;
+      for (let row = 0; row < rows; row++) {
+        if (MATRIX[`${row},${col}`] !== player) {
+          win = false;
+          break;
+        }
+      }
+      if (win) return 1; // AI lost
+    }
+
+    // Check rows
+    for (let row = 0; row < rows; row++) {
+      let win = true;
+      for (let col = 0; col < cols; col++) {
+        if (MATRIX[`${row},${col}`] !== player) {
+          win = false;
+          break;
+        }
+      }
+      if (win) return 1; // AI lost
+    }
+
+    // Diagonal "\"
+    let win = true;
+    for (let i = 0; i < rows; i++) {
+      if (MATRIX[`${i},${i}`] !== player) {
+        win = false;
+        break;
+      }
+    }
+    if (win) return 1; // AI lost
+
+    // Diagonal "/"
+    win = true;
+    for (let i = 0; i < rows; i++) {
+      if (MATRIX[`${i},${cols - 1 - i}`] !== player) {
+        win = false;
+        break;
+      }
+    }
+    if (win) return 1; // AI lost
+  }
+
+  // Check for draw
+  let draw = true;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (MATRIX[`${row},${col}`] == null) {
+        draw = false;
+        break;
+      }
+    }
+    if (!draw) break;
+  }
+
+  if (draw) return 3;
+
+  // Still in play
+  return 0;
+}
