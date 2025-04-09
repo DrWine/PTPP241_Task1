@@ -86,7 +86,7 @@ function TakeTurn(x, y, row, col) {
   
   placedPieces.push(piece);
   turn = !turn;
-  console.log(VirtualCheck.call(this, 'x'));
+  console.log(HasLost.call(this, 'x'));
   Check.call(this);
 }
 
@@ -207,7 +207,7 @@ function min_max(){
 
 }
 
-function VirtualCheck(ai) {
+function HasLost(MATRIX, ai) {
   for (let i = 0; i < players.length; i++) {
     const player = players[i];
     if (player === ai) continue; // We're only checking if anyone OTHER than AI has won
@@ -216,7 +216,7 @@ function VirtualCheck(ai) {
     for (let col = 0; col < cols; col++) {
       let win = true;
       for (let row = 0; row < rows; row++) {
-        if (matrix[`${row},${col}`] !== player) {
+        if (MATRIX[`${row},${col}`] !== player) {
           win = false;
           break;
         }
@@ -228,7 +228,7 @@ function VirtualCheck(ai) {
     for (let row = 0; row < rows; row++) {
       let win = true;
       for (let col = 0; col < cols; col++) {
-        if (matrix[`${row},${col}`] !== player) {
+        if (MATRIX[`${row},${col}`] !== player) {
           win = false;
           break;
         }
@@ -239,7 +239,7 @@ function VirtualCheck(ai) {
     // Diagonal "\"
     let win = true;
     for (let i = 0; i < rows; i++) {
-      if (matrix[`${i},${i}`] !== player) {
+      if (MATRIX[`${i},${i}`] !== player) {
         win = false;
         break;
       }
@@ -249,7 +249,7 @@ function VirtualCheck(ai) {
     // Diagonal "/"
     win = true;
     for (let i = 0; i < rows; i++) {
-      if (matrix[`${i},${cols - 1 - i}`] !== player) {
+      if (MATRIX[`${i},${cols - 1 - i}`] !== player) {
         win = false;
         break;
       }
@@ -261,7 +261,7 @@ function VirtualCheck(ai) {
   let draw = true;
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      if (matrix[`${row},${col}`] == null) {
+      if (MATRIX[`${row},${col}`] == null) {
         draw = false;
         break;
       }
