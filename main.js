@@ -78,7 +78,7 @@ function TakeTurn(x, y, row, col) {
   
   if (turn) {
     matrix[key] = 'x';
-    piece = this.add.image(x, y, 'ObjectX').setScale(1);
+    piece = this.add.image(x, y, 'ObjectX').setScale(0.7);
   } else {
     matrix[key] = 'o';
     piece = this.add.image(x, y, 'ObjectO').setScale(0.5);
@@ -90,9 +90,7 @@ function TakeTurn(x, y, row, col) {
 }
 
 function Check() {
-  // Check for wins first by looping through each player
   for (let player of players) {
-    // Vertical win check
     for (let col = 0; col < cols; col++) {
       let win = true;
       for (let row = 0; row < rows; row++) {
@@ -108,8 +106,6 @@ function Check() {
         return;
       }
     }
-
-    // Horizontal win check
     for (let row = 0; row < rows; row++) {
       let win = true;
       for (let col = 0; col < cols; col++) {
@@ -158,7 +154,6 @@ function Check() {
     }
   }
 
-  // If no win is detected, check for a draw (i.e., no empty cells)
   let draw = true;
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
