@@ -78,7 +78,7 @@ function TakeTurn(x, y, row, col) {
   
   if (turn) {
     matrix[key] = 'x';
-    piece = this.add.image(x, y, 'ObjectX').setScale(0.7);
+    piece = this.add.image(x, y, 'ObjectX').setScale(1);
   } else {
     matrix[key] = 'o';
     piece = this.add.image(x, y, 'ObjectO').setScale(0.5);
@@ -90,8 +90,9 @@ function TakeTurn(x, y, row, col) {
 }
 
 function Check() {
-  players.forEach((player) => {
-    // vertical
+  // Check for wins first by looping through each player
+  for (let player of players) {
+    // Vertical win check
     for (let col = 0; col < cols; col++) {
       let win = true;
       for (let row = 0; row < rows; row++) {
@@ -103,11 +104,12 @@ function Check() {
       if (win) {
         displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
+        gameOver = true;
         return;
       }
     }
 
-    // horizontal
+    // Horizontal win check
     for (let row = 0; row < rows; row++) {
       let win = true;
       for (let col = 0; col < cols; col++) {
@@ -119,13 +121,15 @@ function Check() {
       if (win) {
         displayWinner.call(this, `Player ${player} wins!`);
         console.log(player, 'wins!');
+        gameOver = true;
         return;
       }
     }
 
-    // diagonal \
+    // Diagonal "\" win check
     let win = true;
-    for (let i = 0; i < cols; i++) {
+    const diagLength = Math.min(rows, cols);
+    for (let i = 0; i < diagLength; i++) {
       if (matrix[`${i},${i}`] !== player) {
         win = false;
         break;
@@ -134,39 +138,45 @@ function Check() {
     if (win) {
       displayWinner.call(this, `Player ${player} wins!`);
       console.log(player, 'wins!');
+      gameOver = true;
       return;
     }
 
-    // diagonal /
+    // Diagonal "/" win check
     win = true;
-    for (let i = 0; i < cols; i++) {
+    for (let i = 0; i < diagLength; i++) {
       if (matrix[`${i},${cols - 1 - i}`] !== player) {
         win = false;
         break;
       }
     }
-    
     if (win) {
-      displayWinner.call(this, `Player "${player}" wins!`);
+      displayWinner.call(this, `Player ${player} wins!`);
       console.log(player, 'wins!');
+      gameOver = true;
       return;
     }
-  });
+  }
 
+  // If no win is detected, check for a draw (i.e., no empty cells)
   let draw = true;
-  for (let key in matrix) {
-    if (matrix[key] == null) {
-      draw = false;
-      break;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (matrix[`${row},${col}`] == null) {
+        draw = false;
+        break;
+      }
     }
+    if (!draw) break;
   }
 
   if (draw) {
     displayWinner.call(this, `It's a draw!`);
     console.log("It's a draw!");
+    gameOver = true;
   }
-
 }
+
 
 function displayWinner(message){
   let popup_cover = document.getElementById("popup-cover");
