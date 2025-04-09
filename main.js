@@ -144,7 +144,6 @@ function Check() {
         break;
       }
     }
-
     if (win) {
       displayWinner.call(this, `Player "${player}" wins!`);
       console.log(player, 'wins!');
@@ -160,7 +159,7 @@ function Check() {
     }
   }
 
-  if (draw) {
+  if (draw && !win) {
     displayWinner.call(this, `It's a draw!`);
     console.log("It's a draw!");
   }
