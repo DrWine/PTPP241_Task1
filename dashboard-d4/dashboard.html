@@ -44,6 +44,7 @@
       list-style: none;
       margin: 0;
       padding: 0;
+      z-index: 2;
     }
 
     .sidebar-btn {
@@ -62,6 +63,7 @@
     }
     
     #corner {
+    position: fixed;
       min-width: 12rem;
       width: 15rem;
       text-align: center;
@@ -70,26 +72,111 @@
       border-left: 0;
       border-radius: 0;
       border-bottom: 0;
-      display: flex;            
-      align-items: center;       
+      border-top: 0;
+      display: flex;                
       justify-content: center;   
+      z-index: 10;
+      max-height: 5rem;
     }
 
-    .navbar-btns{
+
+
+
+    .sidebar-profil {
         display: flex;
-        height: 100%;
-        align-items: center;
     }
-
+    .profile-picture {
+        margin: 1rem;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 0;
+    }
 .search-container {
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    width: 40vh;
+    height: 2.5rem;
+    padding: 0 1rem;
+    background-color: white;
+    border: 1px solid #D0CFCE;
+    border-radius: 2rem;
+}
+
+
+#search-bar {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 1rem;
+    background: transparent;
+}
+
+
+.profile-picture{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100%;
+}
+
+.circle-navbar-btn{
+    margin-top: 5px;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100%;
+}
+
+.navbar-btns {
+    margin-left: 15rem;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between; /* Spread search to left, buttons to right */
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.navbar-left {
   display: flex;
   align-items: center;
-  width: 40vh;
-  height: 2.5rem;
-  padding: 0 1rem;
-  background-color: white;
-  border: 1px solid #D0CFCE;
-  border-radius: 2rem;
+}
+
+.nabar-3btns {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sidebar-btn {
+  padding: 1.4rem;
+  border-top: 0;
+  border-right: 0;
+  border-left: 5px solid transparent;
+  transition: border-left 0.2s ease, background-color 0.2s ease;
+}
+
+.sidebar-btn:hover {
+  border-left-color: #4b7ff4;
+  background-color: #f0f4ff;
+  cursor: pointer;
+}
+
+.special-btn {
+  padding: 0.7rem;
+  margin: 0.7rem;
+  background-color: #4b7ff4;
+  color: white;
+  border-radius: 0.2rem;
+  border-color: white;
+  border-left: 5px solid transparent; 
+  transition: border-left 0.2s ease, background-color 0.2s ease;
+}
+
+.special-btn:hover {
+  background-color: #3b6fe0;
+  border-left-color: rgb(38, 30, 144);
+  cursor: pointer;
 }
 
 .search-icon {
@@ -97,41 +184,60 @@
   transform: scaleX(-1);
   height: 18px;
   margin-right: 0.7rem;
-  flex-shrink: 0; 
-}
-
-#search-bar {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 1rem;
-  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 
+.circle-navbar-btn {
+  margin-top: 5px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 0.5rem;
+}
+
+.navbar-btn:hover .circle-navbar-btn {
+  background-color: #e0e7ff;
+  transform: scale(1.05); /* subtle grow effect */
+  cursor: pointer;
+}
 
 
   </style>
 </head>
 <body>
-  <div class="navbar">
-      <li class="navbar-btn" id="corner">Dashboard</li>
-            <ul class="navbar-btns">
+    <div class="navbar">
+        <li id="corner"><h3>Dashboard</h3></li>
+        <ul class="navbar-btns">
+          <div class="navbar-left">
             <li class="navbar-btn">
-                <form class="search-container">
-                    <input type="text" id="search-bar" placeholder="Search..." />
-                    <img class="search-icon" src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="search">
-                  </form>
-                  
+              <form class="search-container">
+                <input type="text" id="search-bar" placeholder="Search..." />
+                <img class="search-icon" id="search-icon" src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="search">
+              </form>
             </li>
-            <li class="navbar-btn">Messajes</li>
-            <li class="navbar-btn">Notifications</li>
-            <li class="navbar-btn">Profile</li>
-       </ul>
-  </div>
+          </div>
+          <div class="nabar-3btns">
+            <li class="navbar-btn"><img class="circle-navbar-btn" src="https://www.svgrepo.com/show/533193/mail.svg" alt="Mail"></li>
+            <li class="navbar-btn"><img class="circle-navbar-btn" src="https://www.svgrepo.com/show/489061/notifications.svg" alt="Notification"></li>
+            <li class="navbar-btn"><img class="circle-navbar-btn" src="http://127.0.0.1:5500/dashboard-d4/imgs/pfp.jpg" alt="Profile"></li>
+          </div>
+        </ul>
+      </div>
+      
+
+  
   <div class="sidebar">
     <ul>
-      <li class="sidebar-btn sidebar-profil">Admin</li>
+      <li class="sidebar-btn sidebar-profil">
+        <img class="profile-picture" src="http://127.0.0.1:5500/dashboard-d4/imgs/pfp.jpg">
+        <ul>
+            <li>Grigoriev Artur</li>
+            <li><b>Administrator</b></li>
+        </ul>
+      </li>
       <li class="sidebar-btn">Dashboard</li>
       <li class="sidebar-btn">Components</li>
       <li class="sidebar-btn">Forms</li>
@@ -142,5 +248,14 @@
       <li class="sidebar-btn special-btn">Upgrade to Pro</li>
     </ul>
   </div>
+  <script>
+    const searchInput = document.getElementById('search-bar');
+    const searchIcon = document.getElementById('search-icon');
+  
+    searchIcon.addEventListener('click', () => {
+      searchInput.focus();
+    });
+  </script>
+  
 </body>
 </html>
