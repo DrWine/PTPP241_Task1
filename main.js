@@ -209,7 +209,7 @@ function min_max(){
 function HasLost(MATRIX, ai) {
   for (let i = 0; i < players.length; i++) {
     const player = players[i];
-    if (player === ai) continue; // We're only checking if anyone OTHER than AI has won
+    if (player === ai) continue; 
 
     // Check columns
     for (let col = 0; col < cols; col++) {

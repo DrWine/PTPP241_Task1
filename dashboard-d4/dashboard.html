@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #ededed;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .navbar, .sidebar {
+      border: 1px solid #a1a1a1;
+      background-color: #fff;
+    }
+
+    .navbar {
+      height: 4rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 4rem;
+      left: 0;
+      width: 15rem;
+      min-width: 12rem;
+      height: calc(100% - 4rem);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+      z-index: 0;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sidebar-btn {
+      padding: 1.4rem;
+      border-top: 0;
+      border-right: 0;
+    }
+
+    .special-btn {
+      padding: 0.7rem;
+      margin: 0.7rem;
+      background-color: #4b7ff4;
+      color: white;
+      border-radius: 0.2rem;
+      border-color: white;
+    }
+    
+    #corner {
+      min-width: 12rem;
+      width: 15rem;
+      text-align: center;
+      height: 100%;
+      border: 1px solid #a1a1a1;
+      border-left: 0;
+      border-radius: 0;
+      border-bottom: 0;
+      display: flex;            
+      align-items: center;       
+      justify-content: center;   
+    }
+
+    .navbar-btns{
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 40vh;
+  height: 2.5rem;
+  padding: 0 1rem;
+  background-color: white;
+  border: 1px solid #D0CFCE;
+  border-radius: 2rem;
+}
+
+.search-icon {
+  width: 18px;
+  transform: scaleX(-1);
+  height: 18px;
+  margin-right: 0.7rem;
+  flex-shrink: 0; 
+}
+
+#search-bar {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  background: transparent;
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="navbar">
+      <li class="navbar-btn" id="corner">Dashboard</li>
+            <ul class="navbar-btns">
+            <li class="navbar-btn">
+                <form class="search-container">
+                    <input type="text" id="search-bar" placeholder="Search..." />
+                    <img class="search-icon" src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="search">
+                  </form>
+                  
+            </li>
+            <li class="navbar-btn">Messajes</li>
+            <li class="navbar-btn">Notifications</li>
+            <li class="navbar-btn">Profile</li>
+       </ul>
+  </div>
+  <div class="sidebar">
+    <ul>
+      <li class="sidebar-btn sidebar-profil">Admin</li>
+      <li class="sidebar-btn">Dashboard</li>
+      <li class="sidebar-btn">Components</li>
+      <li class="sidebar-btn">Forms</li>
+      <li class="sidebar-btn">Tables</li>
+      <li class="sidebar-btn">Notifications</li>
+      <li class="sidebar-btn">Typograthy</li>
+      <li class="sidebar-btn">Icons</li>
+      <li class="sidebar-btn special-btn">Upgrade to Pro</li>
+    </ul>
+  </div>
+</body>
+</html>
