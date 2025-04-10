@@ -204,6 +204,16 @@
   cursor: pointer;
 }
 
+.sidebar-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.8rem;
+  vertical-align: middle;
+}
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+}
 
   </style>
 </head>
@@ -231,22 +241,23 @@
   
   <div class="sidebar">
     <ul>
-      <li class="sidebar-btn sidebar-profil">
-        <img class="profile-picture" src="http://127.0.0.1:5500/dashboard-d4/imgs/pfp.jpg">
-        <ul>
+        <li class="sidebar-btn sidebar-profil">
+          <img class="profile-picture" src="http://127.0.0.1:5500/dashboard-d4/imgs/pfp.jpg">
+          <ul>
             <li>Grigoriev Artur</li>
             <li><b>Administrator</b></li>
-        </ul>
-      </li>
-      <li class="sidebar-btn">Dashboard</li>
-      <li class="sidebar-btn">Components</li>
-      <li class="sidebar-btn">Forms</li>
-      <li class="sidebar-btn">Tables</li>
-      <li class="sidebar-btn">Notifications</li>
-      <li class="sidebar-btn">Typograthy</li>
-      <li class="sidebar-btn">Icons</li>
-      <li class="sidebar-btn special-btn">Upgrade to Pro</li>
-    </ul>
+          </ul>
+        </li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/520688/dashboard-5.svg"> Dashboard</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/499594/components.svg"> Components</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/458721/form.svg"> Forms</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/532227/table-columns.svg"> Tables</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/489061/notifications.svg"> Notifications</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/532185/letter-english-a.svg"> Typography</li>
+        <li class="sidebar-btn"><img class="sidebar-icon" src="https://www.svgrepo.com/show/504472/icon-pack-studio.svg"> Icons</li>
+        <li class="sidebar-btn special-btn">Upgrade to Pro</li>
+      </ul>
+      
   </div>
   <script>
     const searchInput = document.getElementById('search-bar');
