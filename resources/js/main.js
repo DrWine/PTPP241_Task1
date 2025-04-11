@@ -85,7 +85,6 @@ function TakeTurn(x, y, row, col) {
   
   placedPieces.push(piece);
   turn = !turn;
-  console.log(HasLost.call(this, 'x'));
   Check.call(this);
 }
 
@@ -165,7 +164,7 @@ function Check() {
     if (!draw) break;
   }
 
-  if (draw && !win) {
+  if (draw) {
     displayWinner.call(this, `It's a draw!`);
     console.log("It's a draw!");
     gameOver = true;
@@ -202,74 +201,22 @@ function restart() {
 }
 
 
-function min_max(){
 
-}
-
-function HasLost(MATRIX, ai) {
-  for (let i = 0; i < players.length; i++) {
-    const player = players[i];
-    if (player === ai) continue; 
-
-    // Check columns
-    for (let col = 0; col < cols; col++) {
-      let win = true;
-      for (let row = 0; row < rows; row++) {
-        if (MATRIX[`${row},${col}`] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) return 1; // AI lost
-    }
-
-    // Check rows
-    for (let row = 0; row < rows; row++) {
-      let win = true;
-      for (let col = 0; col < cols; col++) {
-        if (MATRIX[`${row},${col}`] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) return 1; // AI lost
-    }
-
-    // Diagonal "\"
-    let win = true;
-    for (let i = 0; i < rows; i++) {
-      if (MATRIX[`${i},${i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return 1; // AI lost
-
-    // Diagonal "/"
-    win = true;
-    for (let i = 0; i < rows; i++) {
-      if (MATRIX[`${i},${cols - 1 - i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return 1; // AI lost
+class TreeNode {
+  constructor(matrix, points = 0, parent = null) {
+    this.matrix = matrix;       // Game matrix or board at this node
+    this.points = points
+    this.parent = parent;     // Reference to parent node (optional)
+    this.children = [];       // Array of child TreeNodes
+    this.score = null;        // Minimax score
   }
 
-  // Check for draw
-  let draw = true;
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      if (MATRIX[`${row},${col}`] == null) {
-        draw = false;
-        break;
-      }
-    }
-    if (!draw) break;
+  addChild(childNode) {
+    this.children.push(childNode);
   }
 
-  if (draw) return 3;
-
-  // Still in play
-  return 0;
+  isLeaf() {
+    return this.children.length === 0;
+  }
 }
+
