@@ -22,8 +22,8 @@ let gameOver = false;
 
 
 function preload() {
-  this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/ObjectX.svg');
-  this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/ObjectO.svg');
+  this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/images/ObjectX.svg');
+  this.load.image('ObjectO', 'http://127.0.0.1:5500/resources/images/ObjectO.svg');
 }
 
 function create() {
