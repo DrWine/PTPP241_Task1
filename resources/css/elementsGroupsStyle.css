@@ -1,0 +1,187 @@
+/* ElementsGroupStyle.css - Grouping Styles */
+
+/* Tabs Grouping */
+.main-tabs {
+    display: flex;
+    width: 100%;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+ }
+ 
+ .main-tab {
+    flex: 1;
+    text-align: center;
+    padding: 16px 0;
+    cursor: pointer;
+    font-weight: 700;
+    position: relative;
+    transition: all 0.3s ease;
+    color: #6c757d;
+    font-size: 1rem;
+ }
+ 
+ .main-tab.active {
+    color: #2f74c0;
+    background-color: #ffffff;
+ }
+ 
+ .main-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #2f74c0;
+ }
+ 
+ .register-tabs {
+    display: flex;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+ }
+ 
+ .register-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6c757d;
+    position: relative;
+    transition: all 0.3s ease;
+ }
+ 
+ .register-tab.active {
+    color: #2f74c0;
+ }
+ 
+ .register-tab.completed {
+    color: #28a745;
+ }
+ 
+ .register-tab.active::after,
+ .register-tab.completed::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+ }
+ 
+ .register-tab.active::after {
+    background-color: #2f74c0;
+ }
+ 
+ .register-tab.completed::after {
+    background-color: #28a745;
+ }
+ 
+ /* Tab Content Grouping */
+ .tab-content {
+    padding: 25px 30px;
+    display: none;
+    padding-top: 0;
+ }
+ 
+ .tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+ }
+ 
+ /* Step Indicator Grouping */
+ .step-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0;
+    position: relative;
+ }
+ 
+ .step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 25px;
+    position: relative;
+    z-index: 2;
+    font-weight: 700;
+    transition: all 0.3s ease;
+ }
+ 
+ .step.active {
+    background-color: #2f74c0;
+    color: white;
+    transform: scale(1.1);
+ }
+ 
+ .step.completed {
+    background-color: #28a745;
+    color: white;
+ }
+ 
+ .step-connector {
+    position: absolute;
+    height: 3px;
+    background-color: #e9ecef;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    width: 70px;
+    transition: background-color 0.3s ease;
+ }
+ 
+ .step-connector.line-1-2 {
+    left: calc(50% - 35px - 15px);
+ }
+ 
+ .step-connector.line-2-3 {
+    right: calc(50% - 35px - 15px);
+ }
+ 
+ .step-connector.active {
+    background-color: #2f74c0;
+ }
+ 
+ .step-connector.completed {
+    background-color: #28a745;
+ }
+ 
+ /* Button Grouping */
+ .btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+ }
+ .btn-group .btn {
+    margin-top: 0;
+ }
+ 
+
+ /* Form Container for the Authentication Module */
+.form-container {
+    width: 420px;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+ }
+ 
+ /* Form Specific Groupings */
+ .form-group {
+    margin-bottom: 18px;
+    position: relative;
+ }
+ 
+ /* Animation for Tab Content Fade In */
+ @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+ }
+ 

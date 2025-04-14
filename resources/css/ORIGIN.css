@@ -1,20 +1,29 @@
+/* ORIGIN.CSS - Global Default Configurations */
+
+/* Reset and Global Defaults */
 html, body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: #0f1425;
-    font-weight: 700;
-  }
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0f1425;
+  font-weight: 400;
+  color: #333;
+}
 
+/* Utility Classes and Common Layouts */
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
 
-.card {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    width: 220px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+/* Global Typography */
+h2 {
+  color: #2f74c0;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
