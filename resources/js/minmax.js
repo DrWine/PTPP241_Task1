@@ -131,7 +131,7 @@ function aiMove(aiPlayer = 'x') {
   let bestScore = -Infinity;
   let bestMoveKey = null;
   
-  const maxDepth = 4;
+  const maxDepth = 5;
   
   let root = new TreeNode(cloneMatrix(matrix));
   
@@ -234,6 +234,5 @@ function HasLost(MATRIX, ai, MODE) {
 
   if (draw) return 3;
 
-  // Still in play
   return 0;
 }

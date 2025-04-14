@@ -27,3 +27,32 @@ h2 {
   font-size: 1.5rem;
   font-weight: 700;
 }
+
+
+.site-footer {
+  position:absolute;
+  bottom: 0;
+  background-color: #1e2642;
+  width: 100%;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  border-top: 1px solid #1e2541;
+}
+
+
+.simple-navbar {
+  position: relative;
+  padding: 5px;
+  display: flex;
+  justify-content: flex-start; /* aligns the button to the right */
+  z-index: 1000; 
+  background-color: #1e2642;
+}
+
+#main-btn{
+  width: 5rem;
+  padding: 0.3rem;
+  margin:5px;
+}

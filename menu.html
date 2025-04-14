@@ -1,82 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TIC TAC TOE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="/resources/css/auth.css"> -->
-    <link rel="stylesheet" href="/resources/css/origin.css">
-    <link rel="stylesheet" href="/resources/css/elementsStyle.css">
-    <link rel="stylesheet" href="/resources/css/elementsGroupsStyle.css">
-    <style>
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIC TAC TOE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="/resources/css/auth.css"> -->
+  <link rel="stylesheet" href="/resources/css/origin.css">
+  <link rel="stylesheet" href="/resources/css/elementsStyle.css">
+  <link rel="stylesheet" href="/resources/css/elementsGroupsStyle.css">
+  <style>
+    /* Any additional in-file styles if needed */
+  </style>
 </head>
 <body>
-    <div class="center-div">
+  <div class="wrapper">
+    <nav class="simple-navbar">
+      <a href="http://localhost:5500/menu.html">
+        <button id="main-btn" class="btn btn-primary">Menu</button>
+      </a>
+    </nav>
+
+    <div class="content">
+      <div class="center-div">
         <div class="form-container">
-
-            <div id="loginTab" class="tab-content active">
-                <h2>Welcome Back</h2>
-                <div id="loginMessage" class="message-box"></div>
-
-                <form id="MenuForm" novalidate> <div class="form-group">
-                  <div class="form-group">
-                    <label for="gameMode">Choose Symbol</label>
-                    <div class="switch-wrapper" style="display: flex;">
-                      <button type="button" id="btnOn1" class="btn btn-primary"onclick="CreateSwitch('btnOn1','btnOn1', 'btnOff1', 'toggleState1')">X</button>
-                      <button type="button" id="btnOff1" class="btn" onclick="CreateSwitch('btnOff1','btnOn1', 'btnOff1', 'toggleState1')">O</button>
-                    </div>
-                    <input type="hidden" name="PlayAsXorO" id="toggleState1" value="on">
-                    <span id="loginPasswordHint" class="form-hint"></span>
-                </div>
-                    
-                    <div class="form-group">
-                      <label for="gameMode">Select Opponent</label>
-                      <div class="switch-wrapper" style="display: flex;">
-                        <button type="button" id="btnOn" class="btn btn-primary"onclick="CreateSwitch('btnOn','btnOn', 'btnOff', 'toggleState')">Player</button>
-                        <button type="button" id="btnOff" class="btn" onclick="CreateSwitch('btnOff','btnOn', 'btnOff', 'toggleState')">Robot</button>
-                      </div>
-                      <input type="hidden" name="PlayAgainstPlayerOr" id="toggleState" value="on">
-                      <span id="loginPasswordHint" class="form-hint"></span>
+          <div id="loginTab" class="tab-content active">
+            <h2>Welcome Back</h2>
+            <div id="loginMessage" class="message-box"></div>
+            <form id="MenuForm" novalidate>
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="gameMode">Choose Symbol</label>
+                  <div class="switch-wrapper" style="display: flex;">
+                    <button type="button" id="btnOn1" class="btn btn-primary" onclick="CreateSwitch('btnOn1','btnOn1', 'btnOff1', 'toggleState1')">X</button>
+                    <button type="button" id="btnOff1" class="btn" onclick="CreateSwitch('btnOff1','btnOn1', 'btnOff1', 'toggleState1')">O</button>
                   </div>
-                  <style>
-                    .switch-wrapper{
-                      display: flex;
-                    }
-                  </style>
-                    <button type="submit" class="btn btn-primary">PLAY</button>
-                </form>
-            </div>
+                  <input type="hidden" name="PlayAsXorO" id="toggleState1" value="on">
+                  <span id="loginPasswordHint" class="form-hint"></span>
+                </div>
+                <div class="form-group">
+                  <label for="gameMode">Select Opponent</label>
+                  <div class="switch-wrapper" style="display: flex;">
+                    <button type="button" id="btnOn" class="btn btn-primary" onclick="CreateSwitch('btnOn','btnOn', 'btnOff', 'toggleState')">Player</button>
+                    <button type="button" id="btnOff" class="btn" onclick="CreateSwitch('btnOff','btnOn', 'btnOff', 'toggleState')">Robot</button>
+                  </div>
+                  <input type="hidden" name="PlayAgainstPlayerOr" id="toggleState" value="on">
+                  <span id="loginPasswordHint" class="form-hint"></span>
+                </div>
+                <style>
+                  .switch-wrapper {
+                    display: flex;
+                  }
+                </style>
+                <button type="submit" class="btn btn-primary">PLAY</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="site-footer">
+      <p>&copy; 2025 All Rights Reserved. All content is copyrighted.</p>
+    </footer>
+  </div>  
 
-           </div> 
-          </div> 
-    <script>
-
-
+  <script>
     function saveFormToCookie(event) {
       event.preventDefault();
       const cookieName = "GameSettings";
-      
       deleteCookie(cookieName);
-
       const formData = new FormData(event.target);
       const formDataObj = Object.fromEntries(formData.entries());
       const formDataJSON = JSON.stringify(formDataObj);
-
       const days = 7;
       const date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
       const expires = "; expires=" + date.toUTCString();
-
       document.cookie = cookieName + "=" + encodeURIComponent(formDataJSON) + expires + "; path=/";
       console.log("GameSettings Cookie set to:", formDataJSON);
       window.location.href = "http://localhost:5500/main.html";
     }
-
     document.getElementById('MenuForm').addEventListener('submit', saveFormToCookie);
-    </script>
-    <script src="/resources/js/context.js"></script>
-    <script src="/resources\js\elementsScripts.js"></script>
+  </script>
+  <script src="/resources/js/context.js"></script>
+  <script src="/resources/js/elementsScripts.js"></script>
 </body>
 </html>
