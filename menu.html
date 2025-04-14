@@ -1,128 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>X and Zero - Setup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: #0f1425;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-    }
-
-    .form-container {
-      color: rgba(0,0,0,0.3);
-      background-color: #ffffff;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-      width: 350px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 1.5rem;
-      font-size: 2rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    fieldset {
-      border: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    legend {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #cccccc;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-    }
-
-    input[type="radio"] {
-      margin-right: 0.5rem;
-    }
-
-    .submit-btn {
-      padding: 0.75rem;
-      border: none;
-      background-color: #2f74c0;
-      color: #ffffff;
-      font-size: 1.1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .submit-btn:hover {
-      background-color: #1e5da0;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TIC TAC TOE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/resources/css/auth.css">
+    <style>
+    </style>
 </head>
 <body>
-  <div class="form-container">
-    <h1>X and Zero</h1>
-    <form id="game-form">
-      <fieldset>
-        <legend>Game Mode</legend>
-        <label>
-          <input type="radio" name="mode" value="pvp" required>
-          Player vs Player
-        </label>
-        <label>
-          <input type="radio" name="mode" value="pvc">
-          Player vs AI
-        </label>
-      </fieldset>
-      <fieldset>
-        <legend>Select Your Symbol</legend>
-        <label>
-          <input type="radio" name="symbol" value="X" required>
-          X
-        </label>
-        <label>
-          <input type="radio" name="symbol" value="O">
-          O
-        </label>
-      </fieldset>
-      <button type="submit" class="submit-btn">Start Game</button>
-    </form>
-  </div>
-  
-  <script>
-    document.getElementById('game-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const symbol = document.querySelector('input[name="symbol"]:checked').value;
+    <div class="center-div">
+        <div class="form-container">
 
-      // In a no-nonsense approach, we simply log the chosen options.
-      console.log("Game Mode:", mode, "Symbol:", symbol);
-      
-      // For now, just display a basic alert.
-      alert("Starting game: " + (mode === "pvp" ? "Player vs Player" : "Player vs AI") + " with symbol '" + symbol + "'");
-      // Integration with the game logic should be implemented here.
-    });
-  </script>
-  <script src="/resources/js/context.js"></script>
+            <div id="loginTab" class="tab-content active">
+                <h2>Welcome Back</h2>
+                <div id="loginMessage" class="message-box"></div>
 
+                <form id="loginForm" novalidate> <div class="form-group">
+                  <div class="form-group">
+                    <label for="gameMode">Choose Symbol</label>
+                    <div class="switch-wrapper" style="display: flex;">
+                      <button type="button" id="btnOn1" class="btn btn-primary"onclick="CreateSwitch('btnOn1','btnOn1', 'btnOff1', 'toggleState1')">X</button>
+                      <button type="button" id="btnOff1" class="btn" onclick="CreateSwitch('btnOff1','btnOn1', 'btnOff1', 'toggleState1')">O</button>
+                    </div>
+                    <input type="hidden" name="PlayAsXorO" id="toggleState1" value="on">
+                    <span id="loginPasswordHint" class="form-hint"></span>
+                </div>
+                    
+                    <div class="form-group">
+                      <label for="gameMode">Select Opponent</label>
+                      <div class="switch-wrapper" style="display: flex;">
+                        <button type="button" id="btnOn" class="btn btn-primary"onclick="CreateSwitch('btnOn','btnOn', 'btnOff', 'toggleState')">Player</button>
+                        <button type="button" id="btnOff" class="btn" onclick="CreateSwitch('btnOff','btnOn', 'btnOff', 'toggleState')">Robot</button>
+                      </div>
+                      <input type="hidden" name="PlayAgainstPlayerOr" id="toggleState" value="on">
+                      <span id="loginPasswordHint" class="form-hint"></span>
+                  </div>
+                  <style>
+                    .switch-wrapper{
+                      display: flex;
+                    }
+                  </style>
+                  <script>
+                    function CreateSwitch(selfId, btnIdOn, btnIdOff, inputId){
+                      let btn1 = document.getElementById(btnIdOn);
+                      let self = document.getElementById(selfId);
+                      let btn2 = document.getElementById(btnIdOff);
+                      let input = document.getElementById(inputId);
+                      if (selfId === btnIdOn){
+                        input.value = 'on';
+                        btn1.classList.add('btn-primary');
+                        btn2.classList.remove('btn-primary');
+                        
+                      } else {
+                        input.value = 'off';
+                        btn2.classList.add('btn-primary');
+                        btn1.classList.remove('btn-primary');
+                        
+                      }
+                    }
+                  </script>
+                    <button type="submit" class="btn btn-primary">PLAY</button>
+                </form>
+            </div>
 
+           </div> 
+          </div> 
+    <script src="/resources/js/context.js"></script>
 </body>
 </html>

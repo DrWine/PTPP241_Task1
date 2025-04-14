@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
             showStep(1);
           },
           validateEmail = email => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.toLowerCase()),
-          validatePhone = phone => { const digits = (phone.match(/\d/g)||[]).join(''); return /^\+?[\d\s()-]{7,}$/.test(phone) && digits.length >= 7 && digits.length <= 15; },
+          validatePhone = phone => {const digits = (phone.match(/\d/g) || []).join(''); return /^(\+?\d{0,3}[\s-]?)?(06|07)\d{5,13}$/.test(digits) && digits.length >= 7 && digits.length <= 15;
+          };
+          
           validatePW = pw => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/.test(pw),
           checkStrength = pw => { let s = 0; s += pw.length >= 8; s += /[A-Z]/.test(pw); s += /[a-z]/.test(pw); s += /\d/.test(pw); s += /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw); strengthMeter.className = 'strength-meter'; passwordHint.classList.remove('error'); 
             if(s <= 2) strengthMeter.classList.add('strength-weak'); else if(s <= 4) strengthMeter.classList.add('strength-medium'); else strengthMeter.classList.add('strength-strong');
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!valid) msg = 'This field is required'; 
             else if(type==='name' && val.length < 3) { msg = 'Name must be at least 3 characters'; valid = false; }
             else if(type==='email' && !validateEmail(val)) { msg = 'Please enter a valid email address'; valid = false; }
-            else if(type==='phone' && !validatePhone(val)) { msg = 'Please enter a valid phone number (e.g., +1 XXX XXX XXXX)'; valid = false; }
+            else if(type==='phone' && !validatePhone(val)) { msg = 'Please enter a valid phone number (e.g., +1 06XXX XXX XXXX)'; valid = false; }
             else if(type==='password') { checkStrength(val); if(!validatePW(val)) { msg = 'Min 8 chars: upper, lower, number, symbol'; valid = false; } }
             else if(type==='confirmPassword') { if(val !== regPassword.value) { msg = 'Passwords do not match'; valid = false; } else if(val === '') { msg = 'Please confirm your password'; valid = false; } }
             setField(inp, hint, msg, !valid);
