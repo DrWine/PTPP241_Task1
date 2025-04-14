@@ -12,3 +12,21 @@ document.addEventListener('DOMContentLoaded', function () {
     
     console.log(debugLoginStatus);
 });
+
+
+function getCookie(name) {
+    const cookieArr = document.cookie.split(";");
+    for (let cookie of cookieArr) {
+      cookie = cookie.trim();
+      // Check if this cookie string begins with the name we want.
+      if (cookie.indexOf(name + "=") === 0) {
+        return decodeURIComponent(cookie.substring(name.length + 1));
+      }
+    }
+    return null;
+  }
+  
+  
+function deleteCookie(cookieName) {
+    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }

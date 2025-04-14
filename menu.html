@@ -6,7 +6,7 @@
     <title>TIC TAC TOE</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" href="/resources/css/auth.css"> -->
-    <link rel="stylesheet" href="/resources/css/ORIGIN.css">
+    <link rel="stylesheet" href="/resources/css/origin.css">
     <link rel="stylesheet" href="/resources/css/elementsStyle.css">
     <link rel="stylesheet" href="/resources/css/elementsGroupsStyle.css">
     <style>
@@ -20,7 +20,7 @@
                 <h2>Welcome Back</h2>
                 <div id="loginMessage" class="message-box"></div>
 
-                <form id="loginForm" novalidate> <div class="form-group">
+                <form id="MenuForm" novalidate> <div class="form-group">
                   <div class="form-group">
                     <label for="gameMode">Choose Symbol</label>
                     <div class="switch-wrapper" style="display: flex;">
@@ -45,31 +45,38 @@
                       display: flex;
                     }
                   </style>
-                  <script>
-                    function CreateSwitch(selfId, btnIdOn, btnIdOff, inputId){
-                      let btn1 = document.getElementById(btnIdOn);
-                      let self = document.getElementById(selfId);
-                      let btn2 = document.getElementById(btnIdOff);
-                      let input = document.getElementById(inputId);
-                      if (selfId === btnIdOn){
-                        input.value = 'on';
-                        btn1.classList.add('btn-primary');
-                        btn2.classList.remove('btn-primary');
-                        
-                      } else {
-                        input.value = 'off';
-                        btn2.classList.add('btn-primary');
-                        btn1.classList.remove('btn-primary');
-                        
-                      }
-                    }
-                  </script>
                     <button type="submit" class="btn btn-primary">PLAY</button>
                 </form>
             </div>
 
            </div> 
           </div> 
+    <script>
+
+
+    function saveFormToCookie(event) {
+      event.preventDefault();
+      const cookieName = "GameSettings";
+      
+      deleteCookie(cookieName);
+
+      const formData = new FormData(event.target);
+      const formDataObj = Object.fromEntries(formData.entries());
+      const formDataJSON = JSON.stringify(formDataObj);
+
+      const days = 7;
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "; expires=" + date.toUTCString();
+
+      document.cookie = cookieName + "=" + encodeURIComponent(formDataJSON) + expires + "; path=/";
+      console.log("GameSettings Cookie set to:", formDataJSON);
+      window.location.href = "http://localhost:5500/main.html";
+    }
+
+    document.getElementById('MenuForm').addEventListener('submit', saveFormToCookie);
+    </script>
     <script src="/resources/js/context.js"></script>
+    <script src="/resources\js\elementsScripts.js"></script>
 </body>
 </html>

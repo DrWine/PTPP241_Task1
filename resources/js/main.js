@@ -70,23 +70,43 @@ function TakeTurn(x, y, row, col) {
   if (gameOver) return;
 
   const key = `${row},${col}`;
-  if (matrix[key] != null) {
+  if (matrix[key] !== null) return;
+
+  const gameSettingsJSON = getCookie("GameSettings");
+  if (!gameSettingsJSON) {
+    window.location.assign("http://localhost:5500/menu.html");
+    return;
+  }
+  const gameSettings = JSON.parse(gameSettingsJSON);
+  console.log("GameSettings:", gameSettings);
+
+  const currentPlayer = turn ? 'x' : 'o';
+  const humanPlayer = (gameSettings.PlayAsXorO === 'on') ? 'x' : 'o';
+
+  if (gameSettings.PlayAgainstPlayerOr === 'off' && currentPlayer !== humanPlayer) {
+    aiMove(currentPlayer);
     return;
   }
 
-  
-  if (turn) {
-    matrix[key] = 'x';
-    piece = this.add.image(x, y, 'ObjectX').setScale(0.7);
-  } else {
-    matrix[key] = 'o';
-    piece = this.add.image(x, y, 'ObjectO').setScale(0.5);
-  }
-  
+  // Process human move
+  matrix[key] = currentPlayer;
+  const asset = (currentPlayer === 'x') ? 'ObjectX' : 'ObjectO';
+  const scale = (currentPlayer === 'x') ? 0.7 : 0.5;
+  const piece = this.add.image(x, y, asset).setScale(scale);
   placedPieces.push(piece);
   turn = !turn;
   Check.call(this);
+
+  //Call ai move
+  if (gameSettings.PlayAgainstPlayerOr === 'off' && !gameOver) {
+    const newCurrentPlayer = turn ? 'x' : 'o';
+    if (newCurrentPlayer !== humanPlayer) {
+      aiMove(newCurrentPlayer);
+    }
+  }
 }
+
+
 
 function Check() {
   for (let player of players) {
@@ -198,25 +218,5 @@ function restart() {
   // Destroy all placed X/O pieces
   placedPieces.forEach(piece => piece.destroy());
   placedPieces = [];
-}
-
-
-
-class TreeNode {
-  constructor(matrix, points = 0, parent = null) {
-    this.matrix = matrix;       // Game matrix or board at this node
-    this.points = points
-    this.parent = parent;     // Reference to parent node (optional)
-    this.children = [];       // Array of child TreeNodes
-    this.score = null;        // Minimax score
-  }
-
-  addChild(childNode) {
-    this.children.push(childNode);
-  }
-
-  isLeaf() {
-    return this.children.length === 0;
-  }
 }
 
