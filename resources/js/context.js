@@ -18,7 +18,6 @@ function getCookie(name) {
     const cookieArr = document.cookie.split(";");
     for (let cookie of cookieArr) {
       cookie = cookie.trim();
-      // Check if this cookie string begins with the name we want.
       if (cookie.indexOf(name + "=") === 0) {
         return decodeURIComponent(cookie.substring(name.length + 1));
       }
@@ -29,4 +28,21 @@ function getCookie(name) {
   
 function deleteCookie(cookieName) {
     document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+function CreateSwitch(selfId, btnIdOn, btnIdOff, inputId){
+    let btn1 = document.getElementById(btnIdOn);
+    let self = document.getElementById(selfId);
+    let btn2 = document.getElementById(btnIdOff);
+    let input = document.getElementById(inputId);
+    if (selfId === btnIdOn){
+      input.value = 'on';
+      btn1.classList.add('btn-primary');
+      btn2.classList.remove('btn-primary');
+      
+    } else {
+      input.value = 'off';
+      btn2.classList.add('btn-primary');
+      btn1.classList.remove('btn-primary');
+    }
   }

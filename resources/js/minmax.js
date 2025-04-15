@@ -143,6 +143,8 @@ function aiMove(aiPlayer = 'x') {
     
     let child = new TreeNode(cloned, 0, root);
     root.addChild(child);
+    
+    // Use the maxDepth parameter in the minimax function
     let score = min_max(child, 0, false, aiPlayer, maxDepth);
     if (score > bestScore) {
       bestScore = score;
