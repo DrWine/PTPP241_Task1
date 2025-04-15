@@ -143,8 +143,6 @@ function aiMove(aiPlayer = 'x') {
     
     let child = new TreeNode(cloned, 0, root);
     root.addChild(child);
-    
-    // Use the maxDepth parameter in the minimax function
     let score = min_max(child, 0, false, aiPlayer, maxDepth);
     if (score > bestScore) {
       bestScore = score;
@@ -160,10 +158,21 @@ function aiMove(aiPlayer = 'x') {
     const y = row * cellHeight + cellHeight / 2;
     
     matrix[bestMoveKey] = aiPlayer;
-    // Choose asset conditionally based on aiPlayer
+    
     let asset = aiPlayer === 'x' ? 'ObjectX' : 'ObjectO';
-    let piece = game.scene.scenes[0].add.image(x, y, asset).setScale(aiPlayer === 'x' ? 0.7 : 0.5);
+    let finalScale = aiPlayer === 'x' ? 0.7 : 0.5;
+    
+    let piece = game.scene.scenes[0].add.image(x, y, asset).setScale(0);
     placedPieces.push(piece);
+    
+    game.scene.scenes[0].tweens.add({
+      targets: piece,
+      scaleX: finalScale,
+      scaleY: finalScale,
+      ease: 'Back.easeOut',
+      duration: 300,
+    });
+    
     turn = !turn;
     Check.call(game.scene.scenes[0]);
   }

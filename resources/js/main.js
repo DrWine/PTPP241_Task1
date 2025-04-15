@@ -88,16 +88,24 @@ function TakeTurn(x, y, row, col) {
     return;
   }
 
-  // Process human move
   matrix[key] = currentPlayer;
   const asset = (currentPlayer === 'x') ? 'ObjectX' : 'ObjectO';
   const scale = (currentPlayer === 'x') ? 0.7 : 0.5;
-  const piece = this.add.image(x, y, asset).setScale(scale);
+  
+  const piece = this.add.image(x, y, asset).setScale(0);
   placedPieces.push(piece);
+  
+  this.tweens.add({
+    targets: piece,
+    scaleX: scale,
+    scaleY: scale,
+    ease: 'Back.easeOut', 
+    duration: 300,      
+  });
+  
   turn = !turn;
   Check.call(this);
 
-  //Call ai move
   if (gameSettings.PlayAgainstPlayerOr === 'off' && !gameOver) {
     const newCurrentPlayer = turn ? 'x' : 'o';
     if (newCurrentPlayer !== humanPlayer) {
@@ -105,6 +113,7 @@ function TakeTurn(x, y, row, col) {
     }
   }
 }
+
 
 
 
