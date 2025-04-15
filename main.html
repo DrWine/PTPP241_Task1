@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>X and Zero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+
   <link rel="stylesheet" href="/resources/css/origin.css">
   <link rel="stylesheet" href="/resources/css/style.css">
   <link rel="stylesheet" href="/resources/css/elementsStyle.css">
   <link rel="stylesheet" href="/resources/css/elementsGroupsStyle.css">
-
 </head>
-<nav class="simple-navbar">
-  <a href="http://localhost:5500/menu.html"><button id="main-btn" class="btn btn-primary">Menu</button></a>
-</nav>
+<body>
+  <div class="wrapper">
 
+    <nav class="simple-navbar">
+      <a href="http://localhost:5500/menu.html">
+        <button id="main-btn" class="btn btn-primary">Menu</button>
+      </a>
+    </nav>
 
-  <div class="title">
-    <h1>TIC TAC TOE</h1>
-  </div>
-
-  <div id="popup-cover" style="display: none;">
-    <div id="popup" class="card">
-      <p id="popup-text">This is a pop-up window</p>
-      <button onclick="restart()" class="boton-elegante">Close</button>
+    <div class="title">
+      <h1>TIC TAC TOE</h1>
     </div>
+
+    <div id="popup-cover" style="display: none;">
+      <div id="popup" class="card">
+        <p id="popup-text">This is a pop-up window</p>
+        <button onclick="restart()" class="boton-elegante">Close</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="game-wrapper">
+        <div id="game-container"></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>&copy; 2025 All Rights Reserved. All content is copyrighted.</p>
+    </footer>
   </div>
 
-  <div id="game-wrapper">
-    <div id="game-container"></div>
-  </div>
-
-<script src='http://127.0.0.1:5500/resources/js/main.js'></script>
-<script src='http://127.0.0.1:5500/resources/js/minmax.js'></script>
-<script src="/resources/js/context.js"></script>
-<footer class="site-footer">
-  <p>&copy; 2025 All Rights Reserved. All content is copyrighted.</p>
-</footer>
+  <script src="http://127.0.0.1:5500/resources/js/main.js"></script>
+  <script src="http://127.0.0.1:5500/resources/js/minmax.js"></script>
+  <script src="/resources/js/context.js"></script>
 </body>
-
 </html>

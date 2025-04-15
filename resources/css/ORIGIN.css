@@ -11,15 +11,46 @@ html, body {
   color: #333;
 }
 
-/* Utility Classes and Common Layouts */
+/* Main Layout Wrapper */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navigation */
+.simple-navbar {
+  position: relative;
+  padding: 5px;
+  display: flex;
+  justify-content: flex-start;
+  z-index: 1000;
+  background-color: #1e2642;
+}
+
+#main-btn {
+  width: 5rem;
+  padding: 0.3rem;
+  margin: 5px;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Centered Form Container */
 .center-div {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  width: 100%;
 }
 
-/* Global Typography */
+/* Typography */
 h2 {
   color: #2f74c0;
   text-align: center;
@@ -28,31 +59,49 @@ h2 {
   font-weight: 700;
 }
 
-
+/* Footer */
 .site-footer {
-  position:absolute;
-  bottom: 0;
   background-color: #1e2642;
   width: 100%;
-  padding: 5px 0;
+  padding: 0.2rem 0;
   text-align: center;
   font-size: 0.85rem;
   color: #666;
   border-top: 1px solid #1e2541;
 }
 
-
-.simple-navbar {
-  position: relative;
-  padding: 5px;
-  display: flex;
-  justify-content: flex-start; /* aligns the button to the right */
-  z-index: 1000; 
-  background-color: #1e2642;
+/* Form Style Helpers */
+.form-container {
+  max-width: 400px;
+  width: 100%;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
-#main-btn{
-  width: 5rem;
-  padding: 0.3rem;
-  margin:5px;
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.switch-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #2f74c0;
+  color: white;
+}
+
+.btn:not(.btn-primary) {
+  background-color: #ddd;
+  color: #333;
 }
