@@ -1,22 +1,3 @@
-// Tree node for the minimax tree
-class TreeNode {
-  constructor(matrix, points = 0, parent = null) {
-    this.matrix = matrix; // Game board state
-    this.points = points;
-    this.parent = parent;
-    this.children = [];
-    this.score = null;
-  }
-
-  addChild(childNode) {
-    this.children.push(childNode);
-  }
-
-  isLeaf() {
-    return this.children.length === 0;
-  }
-}
-
 function cloneMatrix(matrix) {
   return { ...matrix };
 }
@@ -25,148 +6,97 @@ function getOpponent(player) {
   return players.find(p => p !== player);
 }
 
-function evaluateBoard(matrix, aiPlayer) {
-let score = 0;
-const winningLines = [];
-
-// Add rows
-for (let i = 0; i < rows; i++) {
-  let line = [];
-  for (let j = 0; j < cols; j++) {
-    line.push(`${i},${j}`);
+function checkWin(matrix, player) {
+  for (let row = 0; row < rows; row++) {
+    let win = true;
+    for (let col = 0; col < cols; col++) {
+      if (matrix[`${row},${col}`] !== player) { win = false; break; }
+    }
+    if (win) return true;
   }
-  winningLines.push(line);
-}
-
-// Add columns
-for (let j = 0; j < cols; j++) {
-  let line = [];
+  for (let col = 0; col < cols; col++) {
+    let win = true;
+    for (let row = 0; row < rows; row++) {
+      if (matrix[`${row},${col}`] !== player) { win = false; break; }
+    }
+    if (win) return true;
+  }
+  let win = true;
   for (let i = 0; i < rows; i++) {
-    line.push(`${i},${j}`);
+    if (matrix[`${i},${i}`] !== player) { win = false; break; }
   }
-  winningLines.push(line);
+  if (win) return true;
+  win = true;
+  for (let i = 0; i < rows; i++) {
+    if (matrix[`${i},${cols - 1 - i}`] !== player) { win = false; break; }
+  }
+  return win;
 }
 
-// Add diagonals
-let diag1 = [], diag2 = [];
-for (let i = 0; i < rows; i++) {
-  diag1.push(`${i},${i}`);
-  diag2.push(`${i},${cols - 1 - i}`);
-}
-winningLines.push(diag1, diag2);
-
-for (let line of winningLines) {
-  let aiCount = 0;
-  let opponentCount = 0;
-  for (let key of line) {
-    if (matrix[key] === aiPlayer) aiCount++;
-    else if (matrix[key] !== null) opponentCount++;
+function terminalScore(matrix, aiPlayer, depth) {
+  if (checkWin(matrix, aiPlayer)) return 10 - depth;
+  if (checkWin(matrix, getOpponent(aiPlayer))) return -10 + depth;
+  for (let key in matrix) {
+    if (matrix[key] === null) return null;
   }
-  if (aiCount > 0 && opponentCount === 0) {
-    score += aiCount;
-  }
-  else if (opponentCount > 0 && aiCount === 0) {
-    score -= opponentCount;
-  }
+  return 0;
 }
 
-return score;
-}
-
-function min_max(node, depth, isMaximizing, aiPlayer, maxDepth) {
-  if (HasLost(node.matrix, aiPlayer, false) === 1) {
-    node.score = 10 - depth;
-    return node.score;
-  }
-  if (HasLost(node.matrix, aiPlayer, true) === 1) {
-    node.score = -10 + depth;
-    return node.score;
-  }
-  
-  let emptyFound = false;
-  for (let key in node.matrix) {
-    if (node.matrix[key] == null) {
-      emptyFound = true;
-      break;
+function alphaBeta(matrix, depth, isMaximizing, aiPlayer, alpha, beta) {
+  let score = terminalScore(matrix, aiPlayer, depth);
+  if (score !== null) return score;
+  if (isMaximizing) {
+    let maxEval = -Infinity;
+    for (let key in matrix) {
+      if (matrix[key] !== null) continue;
+      let newMatrix = cloneMatrix(matrix);
+      newMatrix[key] = aiPlayer;
+      let evalScore = alphaBeta(newMatrix, depth + 1, false, aiPlayer, alpha, beta);
+      maxEval = Math.max(maxEval, evalScore);
+      alpha = Math.max(alpha, evalScore);
+      if (beta <= alpha) break;
     }
-  }
-  if (!emptyFound) {
-    node.score = 0;
-    return 0;
-  }
-
-  if (depth === maxDepth) {
-    const heuristicScore = evaluateBoard(node.matrix, aiPlayer);
-    node.score = heuristicScore;
-    return heuristicScore;
-  }
-  
-  let bestScore = isMaximizing ? -Infinity : Infinity;
-  
-  for (let key in node.matrix) {
-    if (node.matrix[key] != null) continue;
-    
-    let cloned = cloneMatrix(node.matrix);
-    cloned[key] = isMaximizing ? aiPlayer : getOpponent(aiPlayer);
-    
-    let child = new TreeNode(cloned, 0, node);
-    node.addChild(child);
-    
-    let score = min_max(child, depth + 1, !isMaximizing, aiPlayer, maxDepth);
-    
-    if (isMaximizing) {
-      bestScore = Math.max(bestScore, score);
-    } else {
-      bestScore = Math.min(bestScore, score);
+    return maxEval;
+  } else {
+    let minEval = Infinity;
+    for (let key in matrix) {
+      if (matrix[key] !== null) continue;
+      let newMatrix = cloneMatrix(matrix);
+      newMatrix[key] = getOpponent(aiPlayer);
+      let evalScore = alphaBeta(newMatrix, depth + 1, true, aiPlayer, alpha, beta);
+      minEval = Math.min(minEval, evalScore);
+      beta = Math.min(beta, evalScore);
+      if (beta <= alpha) break;
     }
+    return minEval;
   }
-  
-  node.score = bestScore;
-  return bestScore;
 }
 
-function aiMove(aiPlayer = 'x') {
+function aiMove(aiPlayer = 'o') {
   if (gameOver) return;
-  
   let bestScore = -Infinity;
   let bestMoveKey = null;
-  
-  const maxDepth = 5;
-  
-  let root = new TreeNode(cloneMatrix(matrix));
-  
   for (let key in matrix) {
     if (matrix[key] !== null) continue;
-    
-    let cloned = cloneMatrix(matrix);
-    cloned[key] = aiPlayer;
-    
-    let child = new TreeNode(cloned, 0, root);
-    root.addChild(child);
-    
-    // Use the maxDepth parameter in the minimax function
-    let score = min_max(child, 0, false, aiPlayer, maxDepth);
+    let newMatrix = cloneMatrix(matrix);
+    newMatrix[key] = aiPlayer;
+    let score = alphaBeta(newMatrix, 0, false, aiPlayer, -Infinity, Infinity);
     if (score > bestScore) {
       bestScore = score;
       bestMoveKey = key;
     }
   }
-  
-  if (bestMoveKey != null) {
+  if (bestMoveKey !== null) {
     let [row, col] = bestMoveKey.split(',').map(Number);
     const cellWidth = game.config.width / cols;
     const cellHeight = game.config.height / rows;
     const x = col * cellWidth + cellWidth / 2;
     const y = row * cellHeight + cellHeight / 2;
-    
     matrix[bestMoveKey] = aiPlayer;
-    
     let asset = aiPlayer === 'x' ? 'ObjectX' : 'ObjectO';
     let finalScale = aiPlayer === 'x' ? 0.7 : 0.5;
-    
     let piece = game.scene.scenes[0].add.image(x, y, asset).setScale(0);
     placedPieces.push(piece);
-    
     game.scene.scenes[0].tweens.add({
       targets: piece,
       scaleX: finalScale,
@@ -174,11 +104,11 @@ function aiMove(aiPlayer = 'x') {
       ease: 'Back.easeOut',
       duration: 300,
     });
-    
     turn = !turn;
     Check.call(game.scene.scenes[0]);
   }
 }
+
 
 function HasLost(MATRIX, ai, MODE) {
   // MODE 0- HASWON, 1-HASLOST
