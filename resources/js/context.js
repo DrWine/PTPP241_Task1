@@ -1,17 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const debugLoginStatus = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('debug_login_status='))
-        ?.split('=')[1];
+  let debugLoginStatus;
+  try {
+      // Try to parse the stored value (if it was saved via JSON.stringify)
+      debugLoginStatus = JSON.parse(localStorage.getItem('debug_login_status'));
+  } catch (e) {
+      // If parsing fails, use the raw string
+      debugLoginStatus = localStorage.getItem('debug_login_status');
+  }
 
-    const path = window.location.pathname;
-    console.log(path);
-    if (path !== '/auth.html' && debugLoginStatus !== 'loggedIn') {
-        window.location.href = 'http://localhost:5500/auth.html';
-    }
-    
-    console.log(debugLoginStatus);
+  const path = window.location.pathname;
+  console.log(path);
+
+  if (path !== '/auth.html' && debugLoginStatus !== 'loggedIn') {
+      window.location.href = 'http://localhost:5500/auth.html';
+  }
+  
+  console.log(debugLoginStatus);
 });
+
+
 
 
 function getCookie(name) {
