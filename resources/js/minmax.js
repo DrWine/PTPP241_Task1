@@ -177,3 +177,4 @@ function HasLost(MATRIX, ai, MODE) {
 
   return 0;
 }
+ 

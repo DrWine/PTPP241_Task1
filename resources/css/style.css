@@ -108,3 +108,14 @@ canvas {
   z-index: 5;
   backdrop-filter: blur(3px);
 }
+.sidepanel{
+  width: 4rem;
+  min-width: fit-content;
+  padding: 2rem;
+  color: white;
+  align-items: start;
+  justify-content: start;
+  display: flex;
+  white-space: nowarp;
+  height: 500px;
+}

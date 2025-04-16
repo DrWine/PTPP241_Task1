@@ -75,3 +75,7 @@ function CreateSwitch(selfId, btnIdOn, btnIdOff, inputId){
       btn1.classList.remove('btn-primary');
     }
   }
+
+  function convert(cantitate, Ounitate){
+    return cantitate * Ounitate;
+  }
