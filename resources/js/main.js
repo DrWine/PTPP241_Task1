@@ -16,10 +16,10 @@ const cols = 3;
 const rows = 3;
 let matrix = {};
 let players = ['o', 'x'];
+let scores = { 'o': 0, 'x': 0 };
 let placedPieces = [];
 let turn = true;
 let gameOver = false;
-
 
 function preload() {
   this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/images/ObjectX.svg');
@@ -51,7 +51,7 @@ function create() {
       let cellRect = this.add.rectangle(
         x + cellWidth / 2,
         y + cellHeight / 2,
-        cellWidth - 8, //Border (or the spacing between grid that mimics the border.)
+        cellWidth - 8, // Border spacing that mimics a border.
         cellHeight - 8,
         cellOuterColor
       ).setInteractive();
@@ -114,11 +114,9 @@ function TakeTurn(x, y, row, col) {
   }
 }
 
-
-
-
 function Check() {
   for (let player of players) {
+    // Vertical win check.
     for (let col = 0; col < cols; col++) {
       let win = true;
       for (let row = 0; row < rows; row++) {
@@ -128,12 +126,15 @@ function Check() {
         }
       }
       if (win) {
-        displayWinner.call(this, `Player ${player} wins!`);
-        console.log(player, 'wins!');
+        // Update score for the winning player.
+        scores[player]++;
+        displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
+        console.log(player, 'wins!', 'Score:', scores[player]);
         gameOver = true;
         return;
       }
     }
+    // Horizontal win check.
     for (let row = 0; row < rows; row++) {
       let win = true;
       for (let col = 0; col < cols; col++) {
@@ -143,14 +144,15 @@ function Check() {
         }
       }
       if (win) {
-        displayWinner.call(this, `Player ${player} wins!`);
-        console.log(player, 'wins!');
+        scores[player]++;
+        displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
+        console.log(player, 'wins!', 'Score:', scores[player]);
         gameOver = true;
         return;
       }
     }
 
-    // Diagonal "\" win check
+    // Diagonal "\" win check.
     let win = true;
     const diagLength = Math.min(rows, cols);
     for (let i = 0; i < diagLength; i++) {
@@ -160,13 +162,14 @@ function Check() {
       }
     }
     if (win) {
-      displayWinner.call(this, `Player ${player} wins!`);
-      console.log(player, 'wins!');
+      scores[player]++;
+      displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
+      console.log(player, 'wins!', 'Score:', scores[player]);
       gameOver = true;
       return;
     }
 
-    // Diagonal "/" win check
+    // Diagonal "/" win check.
     win = true;
     for (let i = 0; i < diagLength; i++) {
       if (matrix[`${i},${cols - 1 - i}`] !== player) {
@@ -175,13 +178,15 @@ function Check() {
       }
     }
     if (win) {
-      displayWinner.call(this, `Player ${player} wins!`);
-      console.log(player, 'wins!');
+      scores[player]++;
+      displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
+      console.log(player, 'wins!', 'Score:', scores[player]);
       gameOver = true;
       return;
     }
   }
 
+  // Check for draw.
   let draw = true;
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -200,8 +205,7 @@ function Check() {
   }
 }
 
-
-function displayWinner(message){
+function displayWinner(message) {
   let popup_cover = document.getElementById("popup-cover");
   let popup_text = document.getElementById("popup-text");
   gameOver = true;
@@ -210,15 +214,17 @@ function displayWinner(message){
 }
 
 function update() {
-  // no game loop logic needed here
+  const scoreX = document.getElementById("score-x");
+  const scoreO = document.getElementById("score-o");
+  scoreX.innerText = `X: ${scores['x']}`;
+  scoreO.innerText = `O: ${scores['o']}`;
 }
 
 function restart() {
   let popup_cover = document.getElementById("popup-cover");
   popup_cover.style.display = "none";
 
-  // Clear matrix state
-  for (let key in matrix){
+  for (let key in matrix) {
     matrix[key] = null;
   }
   gameOver = false;
@@ -228,4 +234,3 @@ function restart() {
   placedPieces.forEach(piece => piece.destroy());
   placedPieces = [];
 }
-
