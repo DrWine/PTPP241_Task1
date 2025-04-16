@@ -28,12 +28,6 @@ html, body {
   background-color: #1e2642;
 }
 
-#main-btn {
-  width: 5rem;
-  padding: 0.3rem;
-  margin: 5px;
-}
-
 /* Content Area */
 .content {
   flex: 1;

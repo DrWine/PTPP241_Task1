@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
   let debugLoginStatus;
   try {
-      // Try to parse the stored value (if it was saved via JSON.stringify)
       debugLoginStatus = JSON.parse(localStorage.getItem('debug_login_status'));
   } catch (e) {
-      // If parsing fails, use the raw string
       debugLoginStatus = localStorage.getItem('debug_login_status');
   }
 
@@ -14,11 +12,14 @@ document.addEventListener('DOMContentLoaded', function () {
   if (path !== '/auth.html' && debugLoginStatus !== 'loggedIn') {
       window.location.href = 'http://localhost:5500/auth.html';
   }
-  
   console.log(debugLoginStatus);
 });
 
 
+function logout() { 
+  localStorage.removeItem('debug_login_status');
+  window.location.href = 'http://localhost:5500/auth.html';
+}
 
 
 function getCookie(name) {
@@ -32,7 +33,28 @@ function getCookie(name) {
     return null;
   }
   
+  // LocalStorage Helpers
+  const saveData = (key, value) => {
+      localStorage.setItem(key, JSON.stringify(value));
+  };
+  const getData = (key) => {
+      let data = localStorage.getItem(key);
+      try {
+          return data ? JSON.parse(data) : null;
+      } catch (e) {
+          return null;
+      }
+  };
   
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutBtn = document.getElementById('logout-btn');
+  const isLoggedIn = getData('debug_login_status') === 'loggedIn';
+
+  if (!isLoggedIn && logoutBtn) {
+    logoutBtn.style.display = 'none';
+  }
+});
+
 function deleteCookie(cookieName) {
     document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }

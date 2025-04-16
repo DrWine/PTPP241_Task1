@@ -106,3 +106,9 @@
 .btn-group .btn {
    margin-top: 0;
 }
+
+.btn-navbar {
+   width: 5rem;
+   padding: 0.3rem;
+   margin: 5px;
+ }

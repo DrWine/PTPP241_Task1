@@ -1,17 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // LocalStorage Helpers
-  const saveData = (key, value) => {
-      localStorage.setItem(key, JSON.stringify(value));
-  };
-  const getData = (key) => {
-      let data = localStorage.getItem(key);
-      try {
-          return data ? JSON.parse(data) : null;
-      } catch (e) {
-          return null;
-      }
-  };
-
   // DOM Helpers
   const $ = s => document.querySelector(s),
         $$ = s => document.querySelectorAll(s);
