@@ -42,6 +42,14 @@
                 </div>
                 <input type="hidden" name="PlayAgainstPlayerOr" id="toggleState" value="on">
               </div>
+              <div class="form-group">
+                <label for="gameMode">Select Board Size</label>
+                <div class="switch-wrapper">
+                  <button type="button" id="btnOn6" class="btn btn-primary" onclick="CreateSwitch('btnOn6','btnOn6', 'btnOff6', 'boardsize')">3x3</button>
+                  <button type="button" id="btnOff6" class="btn" onclick="CreateSwitch('btnOff6','btnOn6', 'btnOff6', 'boardsize')">5x5</button>
+                </div>
+                <input type="hidden" name="BoardSize3x3or5x5" id="boardsize" value="on">
+              </div>
 
               <button type="submit" class="btn btn-primary">PLAY</button>
             </form>

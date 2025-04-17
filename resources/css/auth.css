@@ -118,4 +118,8 @@
 }
 
 
-
+.checkmark-wrap {
+   transform: scaleX(-1);       /* horizontal mirror            */
+   /* or scaleY(-1)  ← vertical */
+   /* or rotate(180deg) ← up‑side‑down */
+}
