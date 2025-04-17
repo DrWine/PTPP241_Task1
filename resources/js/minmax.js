@@ -1,180 +1,109 @@
-function cloneMatrix(matrix) {
-  return { ...matrix };
-}
+const MAX_DEPTH  = 7;                   
+const MAX_NODES  = 50_000;                
+const DIRS       = [[0,1],[1,0],[1,1],[1,-1]]; // → ↓ ↘ ↙
 
-function getOpponent(player) {
-  return players.find(p => p !== player);
-}
+const cloneMatrix = (m) => ({ ...m });
+const getOpponent = (p) => players.find(q => q !== p);
 
-function checkWin(matrix, player) {
-  for (let row = 0; row < rows; row++) {
-    let win = true;
-    for (let col = 0; col < cols; col++) {
-      if (matrix[`${row},${col}`] !== player) { win = false; break; }
+function hasConsecutiveWin(board, player) {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[`${r},${c}`] !== player) continue;
+      for (const [dr, dc] of DIRS) {
+        const r2 = r + dr * (WIN_LEN - 1);
+        const c2 = c + dc * (WIN_LEN - 1);
+        if (r2 < 0 || r2 >= rows || c2 < 0 || c2 >= cols) continue;
+        let ok = true;
+        for (let k = 1; k < WIN_LEN; k++) {
+          if (board[`${r + dr*k},${c + dc*k}`] !== player) { ok = false; break; }
+        }
+        if (ok) return true;
+      }
     }
-    if (win) return true;
   }
-  for (let col = 0; col < cols; col++) {
-    let win = true;
-    for (let row = 0; row < rows; row++) {
-      if (matrix[`${row},${col}`] !== player) { win = false; break; }
-    }
-    if (win) return true;
-  }
-  let win = true;
-  for (let i = 0; i < rows; i++) {
-    if (matrix[`${i},${i}`] !== player) { win = false; break; }
-  }
-  if (win) return true;
-  win = true;
-  for (let i = 0; i < rows; i++) {
-    if (matrix[`${i},${cols - 1 - i}`] !== player) { win = false; break; }
-  }
-  return win;
+  return false;
 }
 
-function terminalScore(matrix, aiPlayer, depth) {
-  if (checkWin(matrix, aiPlayer)) return 10 - depth;
-  if (checkWin(matrix, getOpponent(aiPlayer))) return -10 + depth;
-  for (let key in matrix) {
-    if (matrix[key] === null) return null;
-  }
-  return 0;
+const isBoardFull = (board) => Object.values(board).every(v => v != null);
+
+function evaluate(board, ai, depth) {
+  if (hasConsecutiveWin(board, ai))               return  10 - depth;
+  if (hasConsecutiveWin(board, getOpponent(ai)))  return -10 + depth;
+  return 0;                                       
 }
 
-function alphaBeta(matrix, depth, isMaximizing, aiPlayer, alpha, beta) {
-  let score = terminalScore(matrix, aiPlayer, depth);
-  if (score !== null) return score;
-  if (isMaximizing) {
-    let maxEval = -Infinity;
-    for (let key in matrix) {
-      if (matrix[key] !== null) continue;
-      let newMatrix = cloneMatrix(matrix);
-      newMatrix[key] = aiPlayer;
-      let evalScore = alphaBeta(newMatrix, depth + 1, false, aiPlayer, alpha, beta);
-      maxEval = Math.max(maxEval, evalScore);
-      alpha = Math.max(alpha, evalScore);
-      if (beta <= alpha) break;
+function alphaBeta(board, depth, maximizing, ai, alpha, beta, budget) {
+  if (budget.used++ >= MAX_NODES) return 0;            
+  if (depth >= MAX_DEPTH || isBoardFull(board)) {
+    return evaluate(board, ai, depth);
+  }
+
+  if (maximizing) {
+    let best = -Infinity;
+    for (const k in board) {
+      if (board[k] !== null) continue;
+      const next = cloneMatrix(board); next[k] = ai;
+      best  = Math.max(best,
+               alphaBeta(next, depth+1, false, ai, alpha, beta, budget));
+      alpha = Math.max(alpha, best);
+      if (beta <= alpha) break;                            
     }
-    return maxEval;
+    return best;
   } else {
-    let minEval = Infinity;
-    for (let key in matrix) {
-      if (matrix[key] !== null) continue;
-      let newMatrix = cloneMatrix(matrix);
-      newMatrix[key] = getOpponent(aiPlayer);
-      let evalScore = alphaBeta(newMatrix, depth + 1, true, aiPlayer, alpha, beta);
-      minEval = Math.min(minEval, evalScore);
-      beta = Math.min(beta, evalScore);
-      if (beta <= alpha) break;
+    let best =  Infinity;
+    const opp = getOpponent(ai);
+    for (const k in board) {
+      if (board[k] !== null) continue;
+      const next = cloneMatrix(board); next[k] = opp;
+      best  = Math.min(best,
+               alphaBeta(next, depth+1, true, ai, alpha, beta, budget));
+      beta  = Math.min(beta, best);
+      if (beta <= alpha) break;                        
     }
-    return minEval;
+    return best;
   }
 }
 
 function aiMove(aiPlayer = 'o') {
   if (gameOver) return;
-  let bestScore = -Infinity;
-  let bestMoveKey = null;
-  for (let key in matrix) {
-    if (matrix[key] !== null) continue;
-    let newMatrix = cloneMatrix(matrix);
-    newMatrix[key] = aiPlayer;
-    let score = alphaBeta(newMatrix, 0, false, aiPlayer, -Infinity, Infinity);
-    if (score > bestScore) {
-      bestScore = score;
-      bestMoveKey = key;
-    }
+
+  let bestKey = null;
+  let bestVal = -Infinity;
+  const budget = { used: 0 };                   
+
+  for (const k in matrix) {
+    if (matrix[k] !== null) continue;
+    const next = cloneMatrix(matrix); next[k] = aiPlayer;
+    const val  = alphaBeta(next, 1, false, aiPlayer, -Infinity, Infinity, budget);
+    if (val > bestVal) { bestVal = val; bestKey = k; }
+    if (budget.used >= MAX_NODES) break;         
   }
-  if (bestMoveKey !== null) {
-    let [row, col] = bestMoveKey.split(',').map(Number);
-    const cellWidth = game.config.width / cols;
-    const cellHeight = game.config.height / rows;
-    const x = col * cellWidth + cellWidth / 2;
-    const y = row * cellHeight + cellHeight / 2;
-    matrix[bestMoveKey] = aiPlayer;
-    let asset = aiPlayer === 'x' ? 'ObjectX' : 'ObjectO';
-    let finalScale = aiPlayer === 'x' ? 0.7 : 0.5;
-    let piece = game.scene.scenes[0].add.image(x, y, asset).setScale(0);
-    placedPieces.push(piece);
-    game.scene.scenes[0].tweens.add({
-      targets: piece,
-      scaleX: finalScale,
-      scaleY: finalScale,
-      ease: 'Back.easeOut',
-      duration: 300,
-    });
-    turn = !turn;
-    Check.call(game.scene.scenes[0]);
+
+  if (bestKey == null) {
+    bestKey = Object.keys(matrix).find(k => matrix[k] == null);
+    if (!bestKey) return;                     
   }
+
+  const [r,c] = bestKey.split(',').map(Number);
+  const cellW = game.config.width  / cols;
+  const cellH = game.config.height / rows;
+  const x     = c * cellW + cellW / 2;
+  const y     = r * cellH + cellH / 2;
+
+  matrix[bestKey] = aiPlayer;
+
+  const sprite   = aiPlayer === 'x' ? 'ObjectX' : 'ObjectO';
+  const endScale = aiPlayer === 'x' ? 0.7 : 0.5;
+  const scene    = game.scene.scenes[0];
+
+  const img = scene.add.image(x, y, sprite).setScale(0);
+  placedPieces.push(img);
+
+  scene.tweens.add({
+    targets: img, scaleX: endScale, scaleY: endScale,
+    ease: 'Back.easeOut', duration: 300
+  });
+
+  turn = !turn;
+  Check.call(scene);
 }
-
-
-function HasLost(MATRIX, ai, MODE) {
-  // MODE 0- HASWON, 1-HASLOST
-  for (let i = 0; i < players.length; i++) {
-    const player = players[i];
-    if (player === ai && MODE === true) continue; 
-
-    // Check columns
-    for (let col = 0; col < cols; col++) {
-      let win = true;
-      for (let row = 0; row < rows; row++) {
-        if (MATRIX[`${row},${col}`] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) return 1; // AI lost
-    }
-
-    // Check rows
-    for (let row = 0; row < rows; row++) {
-      let win = true;
-      for (let col = 0; col < cols; col++) {
-        if (MATRIX[`${row},${col}`] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) return 1; // AI lost
-    }
-
-    // Diagonal "\"
-    let win = true;
-    for (let i = 0; i < rows; i++) {
-      if (MATRIX[`${i},${i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return 1; // AI lost
-
-    // Diagonal "/"
-    win = true;
-    for (let i = 0; i < rows; i++) {
-      if (MATRIX[`${i},${cols - 1 - i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) return 1; // AI lost
-  }
-
-  // Check for draw
-  let draw = true;
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      if (MATRIX[`${row},${col}`] == null) {
-        draw = false;
-        break;
-      }
-    }
-    if (!draw) break;
-  }
-
-  if (draw) return 3;
-
-  return 0;
-}
- 

@@ -12,14 +12,15 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
-const cols = 3;
-const rows = 3;
+const cols = 5;
+const rows = 5;
 let matrix = {};
 let players = ['o', 'x'];
 let scores = { 'o': 0, 'x': 0 };
 let placedPieces = [];
 let turn = true;
 let gameOver = false;
+const WIN_LEN = 3;
 
 function preload() {
   this.load.image('ObjectX', 'http://127.0.0.1:5500/resources/images/ObjectX.svg');
@@ -72,137 +73,90 @@ function TakeTurn(x, y, row, col) {
   const key = `${row},${col}`;
   if (matrix[key] !== null) return;
 
-  const gameSettingsJSON = getCookie("GameSettings");
-  if (!gameSettingsJSON) {
+  const settingsJSON = getCookie("GameSettings");
+  if (!settingsJSON) {
     window.location.assign("http://localhost:5500/menu.html");
     return;
   }
-  const gameSettings = JSON.parse(gameSettingsJSON);
-  console.log("GameSettings:", gameSettings);
 
+  const settings = JSON.parse(settingsJSON);
+  const isVsAI = settings.PlayAgainstPlayerOr === 'off';
+  const humanIsX = settings.PlayAsXorO === 'on';
+  const humanPlayer = humanIsX ? 'x' : 'o';
   const currentPlayer = turn ? 'x' : 'o';
-  const humanPlayer = (gameSettings.PlayAsXorO === 'on') ? 'x' : 'o';
 
-  if (gameSettings.PlayAgainstPlayerOr === 'off' && currentPlayer !== humanPlayer) {
-    aiMove(currentPlayer);
-    return;
-  }
+  // block if not human's turn in vs-AI mode
+  if (isVsAI && currentPlayer !== humanPlayer) return;
 
+  // play human move
   matrix[key] = currentPlayer;
-  const asset = (currentPlayer === 'x') ? 'ObjectX' : 'ObjectO';
-  const scale = (currentPlayer === 'x') ? 0.7 : 0.5;
-  
+  const asset = currentPlayer === 'x' ? 'ObjectX' : 'ObjectO';
+  const scale = currentPlayer === 'x' ? 0.7 : 0.5;
+
   const piece = this.add.image(x, y, asset).setScale(0);
   placedPieces.push(piece);
-  
+
   this.tweens.add({
     targets: piece,
     scaleX: scale,
     scaleY: scale,
-    ease: 'Back.easeOut', 
-    duration: 300,      
+    ease: 'Back.easeOut',
+    duration: 300,
   });
-  
+
   turn = !turn;
   Check.call(this);
 
-  if (gameSettings.PlayAgainstPlayerOr === 'off' && !gameOver) {
-    const newCurrentPlayer = turn ? 'x' : 'o';
-    if (newCurrentPlayer !== humanPlayer) {
-      aiMove(newCurrentPlayer);
-    }
+  // trigger AI move (if enabled and game not finished)
+  const nextPlayer = turn ? 'x' : 'o';
+  if (isVsAI && !gameOver && nextPlayer !== humanPlayer) {
+    aiMove(nextPlayer);
   }
 }
 
+
 function Check() {
-  for (let player of players) {
-    // Vertical win check.
-    for (let col = 0; col < cols; col++) {
-      let win = true;
-      for (let row = 0; row < rows; row++) {
-        if (matrix[`${row},${col}`] !== player) {
-          win = false;
-          break;
+  const dirs = [
+    [0, 1],   // →
+    [1, 0],   // ↓
+    [1, 1],   // ↘
+    [1, -1]   // ↙
+  ];
+
+  for (const player of players) {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+
+        if (matrix[`${r},${c}`] !== player) continue;     
+
+        for (const [dr, dc] of dirs) {
+          const r2 = r + dr * (WIN_LEN - 1);
+          const c2 = c + dc * (WIN_LEN - 1);
+
+          if (r2 < 0 || r2 >= rows || c2 < 0 || c2 >= cols) continue;
+
+          let streak = true;
+          for (let k = 1; k < WIN_LEN; k++) {
+            if (matrix[`${r + dr * k},${c + dc * k}`] !== player) {
+              streak = false;
+              break;
+            }
+          }
+          if (streak) {
+            declareWin.call(this, player);
+            return;
+          }
         }
       }
-      if (win) {
-        // Update score for the winning player.
-        scores[player]++;
-        displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
-        console.log(player, 'wins!', 'Score:', scores[player]);
-        gameOver = true;
-        return;
-      }
-    }
-    // Horizontal win check.
-    for (let row = 0; row < rows; row++) {
-      let win = true;
-      for (let col = 0; col < cols; col++) {
-        if (matrix[`${row},${col}`] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) {
-        scores[player]++;
-        displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
-        console.log(player, 'wins!', 'Score:', scores[player]);
-        gameOver = true;
-        return;
-      }
-    }
-
-    // Diagonal "\" win check.
-    let win = true;
-    const diagLength = Math.min(rows, cols);
-    for (let i = 0; i < diagLength; i++) {
-      if (matrix[`${i},${i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) {
-      scores[player]++;
-      displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
-      console.log(player, 'wins!', 'Score:', scores[player]);
-      gameOver = true;
-      return;
-    }
-
-    // Diagonal "/" win check.
-    win = true;
-    for (let i = 0; i < diagLength; i++) {
-      if (matrix[`${i},${cols - 1 - i}`] !== player) {
-        win = false;
-        break;
-      }
-    }
-    if (win) {
-      scores[player]++;
-      displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
-      console.log(player, 'wins!', 'Score:', scores[player]);
-      gameOver = true;
-      return;
     }
   }
 
-  // Check for draw.
-  let draw = true;
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      if (matrix[`${row},${col}`] == null) {
-        draw = false;
-        break;
-      }
-    }
-    if (!draw) break;
+  for (const key in matrix) {
+    if (matrix[key] == null) return;   
   }
-
-  if (draw) {
-    displayWinner.call(this, `It's a draw!`);
-    console.log("It's a draw!");
-    gameOver = true;
-  }
+  displayWinner.call(this, "It's a draw!");
+  console.log("It's a draw!");
+  gameOver = true;
 }
 
 function displayWinner(message) {
@@ -212,6 +166,14 @@ function displayWinner(message) {
   popup_cover.style.display = "block";
   popup_text.innerText = message;
 }
+
+function declareWin(player) {
+  scores[player] += 1;
+  displayWinner.call(this, `Player ${player} wins! Score: ${scores[player]}`);
+  console.log(player, "wins!", "Score:", scores[player]);
+  gameOver = true;
+}
+
 
 function update() {
   const scoreX = document.getElementById("score-x");
