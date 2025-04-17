@@ -36,12 +36,22 @@
     </div>
 
     <div class="content">
-      <div class="sidepanel"><h1 id="score-o">O</h1></div>
       <div id="game-wrapper">
         <div id="game-container"></div>
       </div>
-      <div class="sidepanel"><h1 id="score-x">X</h1></div>
+    
+      <aside class="info-panel">
+        <h2 class="info-title">Score</h2>
+        <ul class="score-list">
+          <li>O&nbsp;•&nbsp;<span id="score-o">0</span></li>
+          <li>X&nbsp;•&nbsp;<span id="score-x">0</span></li>
+        </ul>
+    
+        <p class="turn-indicator">Turn&nbsp;<span id="turn-value">O</span></p>
+        <button class="btn-restart" onclick="restart()">Restart</button>
+      </aside>
     </div>
+    
 
     <footer class="site-footer">
       <p>&copy; 2025 All Rights Reserved. All content is copyrighted.</p>

@@ -1,121 +1,159 @@
-html, body {
+/* core text and heading */
+.title {
+  position: relative;
+  top: 1rem;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.8rem;
   font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: #0f1425;
-  font-weight: 700;
 }
 
-#game-wrapper {
+/* main two‑column layout */
+.content {
+  max-width: 1200px;
+  margin: 3.5rem auto 0;
+  padding: 0 2rem;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+/* responsive stack on small screens */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .info-panel {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .content {
+    gap: 1.5rem;
+  }
+}
+
+/* game section */
+#game-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
   justify-content: center;
 }
 
 #game-container {
-  background-color: #0f1425;
+  width: clamp(280px, 55vmin, 600px);
+  aspect-ratio: 1;
+  border: 4px solid #2f74c0;
+  border-radius: 0.75rem;
+  box-sizing: border-box;
 }
 
-canvas {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  background-color: #0f1425;
+#game-container canvas {
+  width: 100% !important;
+  height: 100% !important;
   display: block;
-  margin: 0 auto;
-  border-style: solid;
-  border-width: 0.25rem;
-  border-radius: 0.25rem;
-  border-color: #0066a7;
 }
 
-.title {
-  font-size: larger;
-  text-align: center;
-  color: white;
-}
-
-.card-container {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
+/* info panel */
+.info-panel {
+  flex: 0 0 300px;
+  max-width: 300px;
+  min-width: 220px;
+  align-self: flex-start;
+  background: #1c223a;
+  border-radius: 0.75rem;
   padding: 2rem;
-  flex-wrap: wrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
 }
 
-.card {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  width: 220px;
+.info-panel h2 {
+  margin: 0 0 1.25rem;
+  font-size: 1.4rem;
   text-align: center;
+  color: #2f74c0;
+}
+
+.score-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1.9rem;
+}
+
+.turn-indicator {
+  margin: 1.5rem 0 0;
+  font-size: 1.1rem;
+}
+
+.btn-restart {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.85rem 0;
+  border: none;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background: #2f74c0;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.25s, transform 0.15s;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+.btn-restart:hover {
+  background: #1e5da0;
+  transform: scale(1.03);
 }
 
-.card-text {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #1a1a1a;
+/* pop‑up overlay */
+#popup-cover {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 37, 0.7);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
 }
 
+/* pop‑up card */
 #popup {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background: #1c223a;
+  color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  width: min(90%, 320px);
+  text-align: center;
 }
 
-
 #popup-text {
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: capitalize;
 }
 
 .boton-elegante {
-  padding: 0.9rem 2rem;
+  width: 100%;
+  padding: 0.9rem 0;
   border: none;
-  background-color: #2f74c0;
+  background: #2f74c0;
   color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   border-radius: 0.75rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  outline: none;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .boton-elegante:hover {
-  background-color: #1e5da0;
+  background: #1e5da0;
   transform: scale(1.05);
-}
-
-#popup-cover {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(15, 20, 37, 0.7);
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  backdrop-filter: blur(3px);
-}
-.sidepanel{
-  width: 4rem;
-  min-width: fit-content;
-  padding: 2rem;
-  color: white;
-  align-items: start;
-  justify-content: start;
-  display: flex;
-  white-space: nowarp;
-  height: 500px;
 }

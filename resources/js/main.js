@@ -216,8 +216,8 @@ function displayWinner(message) {
 function update() {
   const scoreX = document.getElementById("score-x");
   const scoreO = document.getElementById("score-o");
-  scoreX.innerText = `X: ${scores['x']}`;
-  scoreO.innerText = `O: ${scores['o']}`;
+  scoreX.innerText = `${scores['x']}`;
+  scoreO.innerText = `${scores['o']}`;
 }
 
 function restart() {
