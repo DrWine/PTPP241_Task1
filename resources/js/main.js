@@ -70,7 +70,6 @@
     const humanIsX = s.PlayAsXorO === 'on';
   
     if (vsAI && !humanIsX && turn && !gameOver) {
-      // X is robot, X to move
       aiMove('x');
     }
   }
@@ -105,7 +104,6 @@
     turn = !turn;
     Check.call(this);
   
-    /* Robot reply */
     const next = turn ? 'x' : 'o';
     if (vsAI && !gameOver && next !== human) aiMove(next);
   }
